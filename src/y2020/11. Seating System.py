@@ -18,8 +18,9 @@ def seeable(w, h, x, y, state):
                 break
     return seen
 
-def round(determinator, tolerancy, w, h, state):
+def round(determinator, tolerancy, state):
     changes = []
+    h, w = len(state), len(state[0])
     for y in range(h):
         for x in range(w):
             char = state[y][x]
@@ -34,8 +35,8 @@ def round(determinator, tolerancy, w, h, state):
         state[y][x] = c
     return bool(changes)
 
-def simulate(determinator, tolerancy, w, h, state):
-    while round(determinator, tolerancy, w, h, state):
+def simulate(determinator, tolerancy, state):
+    while round(determinator, tolerancy, state):
         pass
     return sum(1 for row in state for char in row if char == '#')
 
@@ -44,8 +45,6 @@ new_state = lambda: [list(line) for line in lines]
 directions = [(dx, dy) for dy in range(-1, 2) for dx in range(-1, 2) if dy or dx]
 
 lines = stdin.read().split('\n')
-h = len(lines)
-w = len(lines[0]) if h else 0
 
-print(f'1: {simulate(adjacent, 4, w, h, new_state())}')
-print(f'2: {simulate(seeable, 5, w, h, new_state())}')
+print(f'1: {simulate(adjacent, 4, new_state())}')
+print(f'2: {simulate(seeable, 5, new_state())}')
