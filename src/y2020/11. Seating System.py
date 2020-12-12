@@ -1,22 +1,33 @@
 from sys import stdin
+from collections import defaultdict
 
-def adjacent(w, h, x, y, state):
-    fields = ((x+dx, y+dy) for (dx, dy) in directions)
-    return ((x, y) for (x, y) in fields if 0 <= x < w and 0 <= y < h)
+def neighbour_tracer():
+    def trace(w, h, x, y, state):
+        if (pos := (x, y)) not in mem:
+            fields = ((x+dx, y+dy) for (dx, dy) in directions)
+            mem[pos] = [(x, y) for (x, y) in fields if 0 <= x < w and 0 <= y < h]
+        return mem[pos]
+    mem = {}
+    return trace
 
-def seeable(w, h, x, y, state):
-    seen = []
-    for dx, dy in directions:
-        p, q = x, y
-        while True:
-            p += dx
-            q += dy
-            if not (0 <= p < w and 0 <= q < h):
-                break
-            if state[q][p] in ('L', '#'):
-                seen.append((p, q))
-                break
-    return seen
+def raytracer():
+    def trace(w, h, x, y, state):
+        if (pos := (x, y)) not in mem:
+            seen = []
+            for dx, dy in directions:
+                p, q = x, y
+                while True:
+                    p += dx
+                    q += dy
+                    if not (0 <= p < w and 0 <= q < h):
+                        break
+                    if state[q][p] in ('L', '#'):
+                        seen.append((p, q))
+                        break
+            mem[pos] = tuple(seen)
+        return mem[pos]
+    mem = {}
+    return trace
 
 def round(determinator, tolerancy, state):
     changes = []
@@ -46,5 +57,5 @@ directions = [(dx, dy) for dy in range(-1, 2) for dx in range(-1, 2) if dy or dx
 
 lines = stdin.read().split('\n')
 
-print(f'1: {simulate(adjacent, 4, new_state())}')
-print(f'2: {simulate(seeable, 5, new_state())}')
+print(f'1: {simulate(neighbour_tracer(), 4, new_state())}')
+print(f'2: {simulate(raytracer(), 5, new_state())}')
