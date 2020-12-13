@@ -1,61 +1,68 @@
-from sys import stdin
 from collections import defaultdict
+from sys import stdin
 
-def neighbour_tracer():
-    def trace(w, h, x, y, state):
-        if (pos := (x, y)) not in mem:
-            fields = ((x+dx, y+dy) for (dx, dy) in directions)
-            mem[pos] = [(x, y) for (x, y) in fields if 0 <= x < w and 0 <= y < h]
-        return mem[pos]
-    mem = {}
-    return trace
+def neighbour_tracer(state):
+    w, h, seats = state
+    mem = [1 for _ in seats]
+    for i, char in enumerate(seats):
+        if char == '.':
+            continue
+        x, y = i % w, i // w
+        fields = ((x+dx, y+dy) for (dx, dy) in directions)
+        fields = (x + w * y for (x, y) in fields if 0 <= x < w and 0 <= y < h)
+        mem[i] = tuple(j for j in fields if seats[j] != '.')
+    return mem
 
-def raytracer():
-    def trace(w, h, x, y, state):
-        if (pos := (x, y)) not in mem:
-            seen = []
-            for dx, dy in directions:
-                p, q = x, y
-                while True:
-                    p += dx
-                    q += dy
-                    if not (0 <= p < w and 0 <= q < h):
-                        break
-                    if state[q][p] in ('L', '#'):
-                        seen.append((p, q))
-                        break
-            mem[pos] = tuple(seen)
-        return mem[pos]
-    mem = {}
-    return trace
+def ray_tracer(state):
+    w, h, seats = state
+    mem = [[] for _ in seats]
+    for i, char in enumerate(seats):
+        if char == '.':
+            continue
+        x, y = i % w, i // w
+        for dx, dy in directions2:
+            p, q = x, y
+            while True:
+                p += dx
+                q += dy
+                if not (0 <= p < w and 0 <= q < h):
+                    break
+                j = p + q * w
+                if seats[j] in ('L', '#'):
+                    mem[i].append(j)
+                    mem[j].append(i)
+                    break
+    return mem
 
-def round(determinator, tolerancy, state):
-    changes = []
-    h, w = len(state), len(state[0])
-    for y in range(h):
-        for x in range(w):
-            char = state[y][x]
-            if char == '.':
-                continue
-            xs = [state[y][x] for (x, y) in determinator(w, h, x, y, state)]
-            if char == 'L' and all(x != '#' for x in xs):
-                changes.append((x, y, '#'))
-            elif char == '#' and sum(1 for x in xs if x == '#') >= tolerancy:
-                changes.append((x, y, 'L'))
-    for x, y, c in changes:
-        state[y][x] = c
+def round(determinator, tolerance, state):
+    w, h, seats, changes = *state, []
+    for i, char in enumerate(seats):
+        if char == '.':
+            continue
+        xs = [seats[j] for j in determinator[i]]
+        if char == 'L' and all(x != '#' for x in xs):
+            changes.append((i, '#'))
+        elif char == '#' and len(xs) >= tolerance <= sum(1 for x in xs if x == '#'):
+            changes.append((i, 'L'))
+    for i, c in changes:
+        seats[i] = c
     return bool(changes)
 
 def simulate(determinator, tolerancy, state):
-    while round(determinator, tolerancy, state):
+    m = determinator(state)
+    while round(m, tolerancy, state):
         pass
-    return sum(1 for row in state for char in row if char == '#')
+    return sum(1 for char in state[2] if char == '#')
 
-new_state = lambda: [list(line) for line in lines]
+new_state = (lambda lines:
+    (len(lines[0] if lines else 0),
+     len(lines),
+     [char for line in lines for char in line]))
 
 directions = [(dx, dy) for dy in range(-1, 2) for dx in range(-1, 2) if dy or dx]
+directions2 = [(1, -1), (1, 0), (1, 1), (0, 1)]
 
 lines = stdin.read().split('\n')
 
-print(f'1: {simulate(neighbour_tracer(), 4, new_state())}')
-print(f'2: {simulate(raytracer(), 5, new_state())}')
+print(f'1: {simulate(neighbour_tracer, 4, new_state(lines))}')
+print(f'2: {simulate(ray_tracer, 5, new_state(lines))}')
