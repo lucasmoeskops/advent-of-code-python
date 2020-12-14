@@ -1,38 +1,42 @@
-from itertools import product
+from functools import reduce
 from re import match
 from sys import stdin
 
-def write_mem(mem, mask, address, value):
-    b = bin(value)[2:].zfill(36)
-    b = [b[i] if m == 'X' else m for i, m in enumerate(mask)]
-    mem[address] = int(''.join(b), 2)
+make_mask = (lambda op, c, m, s:
+    reduce(op, (2**i for i, v in enumerate(reversed(m)) if v == c), s))
 
-def write_mem2(mem, mask, address, value):
-    xs = [i for i, m in enumerate(mask) if m == 'X']
-    bin_address = bin(address)[2:].zfill(36)
-    bin_address = ['1' if m == '1' else bin_address[i] for i, m in enumerate(mask)]
-    for p in product('01', repeat=len(xs)):
-        write_address = bin_address[:]
-        for d, x in zip(p, xs):
-            write_address[x] = d
-        mem[''.join(write_address)] = value
+add_mask      = lambda c, m: make_mask(int.__add__, c, m, 0)
+subtract_mask = lambda c, m: make_mask(int.__sub__, c, m, (2<<35) - 1)
 
-def run(mem, writer, lines):
+def permutations(mask):  # bit permutation-trick with credits to askalski
+    n = -mask & mask
+    yield 0
+    while n != 0:
+        yield n
+        n = (n - mask) & mask
+
+def decode(lines, version=1):
+    mem = {}
     for line in lines:
         m = match(r'mem\[(\d+)\] = (\d+)', line)
         if m:
-            writer(mem, mask, *map(int, m.groups()))
+            address, value = map(int, m.groups())
+            mem[address] = value & and_mask | or_mask
+            if version == 2:
+                for option in permutations(x_mask):
+                    mem[address + option] = value
         else:
             mask = line.split(' = ')[1]
+            if version == 1:
+                and_mask = subtract_mask('0', mask)
+                or_mask = add_mask('1', mask)
+            else:
+                or_mask = add_mask('1', mask)
+                x_mask = add_mask('X', mask)
+                and_mask = subtract_mask('X', mask)
+    return sum(mem.values())
 
 lines = stdin.read().split('\n')
 
-mem = {}
-run(mem, write_mem, lines)
-
-print(f'1: {sum(mem.values())}')
-
-mem = {}
-run(mem, write_mem2, lines)
-
-print(f'2: {sum(mem.values())}')
+print(f'1: {decode(lines)}')
+print(f'2: {decode(lines, 2)}')
