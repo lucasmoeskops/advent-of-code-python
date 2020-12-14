@@ -27,11 +27,10 @@ def decode(lines, version=1):
                     mem[address + option] = value
         else:
             mask = line.split(' = ')[1]
+            or_mask = add_mask('1', mask)
             if version == 1:
                 and_mask = subtract_mask('0', mask)
-                or_mask = add_mask('1', mask)
             else:
-                or_mask = add_mask('1', mask)
                 x_mask = add_mask('X', mask)
                 and_mask = subtract_mask('X', mask)
     return sum(mem.values())
