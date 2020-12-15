@@ -21,12 +21,12 @@ def decode(lines, version=1):
         m = match(r'mem\[(\d+)\] = (\d+)', line)
         if m:
             address, value = map(int, m.groups())
-            if version == 2:
+            if version == 1:
+                mem[address] = value & and_mask | or_mask
+            else:
                 address = address & and_mask | or_mask
                 for option in permutations(x_mask):
                     mem[address + option] = value
-            else:
-                mem[address] = value & and_mask | or_mask
         else:
             mask = line.split(' = ')[1]
             or_mask = add_mask('1', mask)
