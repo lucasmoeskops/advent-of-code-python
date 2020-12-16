@@ -25,6 +25,6 @@ find t initial =
 
 main :: IO ()
 main = do
-    x <- map read.splitOn "," <$> getLine
-    out <- sequence [find i x | i <- [2020, 30000000]]
+    initial <- map read.splitOn "," <$> getLine
+    out     <- sequence [find t initial | t <- [2020, 30000000]]
     print . intercalate ", " . map show $ out
