@@ -1,5 +1,16 @@
-from sys import stdin
+#!/usr/bin/env python3
+
+"""
+AoC Day 12 - Rain Risk - in Python.
+
+2D Grid movement puzzle. Solved with many short functions.
+"""
+
+__author__ = "Lucas Moeskops"
+__date__ = "2020-12-12"
+
 from functools import reduce
+from sys import stdin
 
 manhattan = lambda x, y: abs(x) + abs(y)
 

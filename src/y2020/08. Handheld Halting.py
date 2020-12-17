@@ -1,3 +1,14 @@
+#!/usr/bin/env python3
+
+"""
+AoC Day 8 - Handheld Halting - in Python.
+
+Simple replacement solver.
+"""
+
+__author__ = "Lucas Moeskops"
+__date__ = "2020-12-08"
+
 from sys import stdin
 
 def run(prog):

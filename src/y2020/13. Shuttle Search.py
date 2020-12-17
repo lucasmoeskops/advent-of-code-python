@@ -1,3 +1,15 @@
+#!/usr/bin/env python3
+
+"""
+AoC Day 13 - Shuttle Search - in Python.
+
+Chinese remainder theorem like exercise. Solved with a bit
+different approach, that just efficiently searches matches.
+"""
+
+__author__ = "Lucas Moeskops"
+__date__ = "2020-12-13"
+
 from functools import reduce
 from itertools import count
 from operator import itemgetter

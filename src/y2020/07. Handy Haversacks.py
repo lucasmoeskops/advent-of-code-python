@@ -1,6 +1,17 @@
-from sys import stdin
+#!/usr/bin/env python3
+
+"""
+AoC Day 7 - Handy Haversacks - in Python.
+
+Some random tree methods to solve the problem.
+"""
+
+__author__ = "Lucas Moeskops"
+__date__ = "2020-12-07"
+
 from collections import defaultdict
 from functools import reduce
+from sys import stdin
 
 def parse_rule(s):
     name, contents = s.replace('.', '').replace('bags', 'bag').split(' contain ')

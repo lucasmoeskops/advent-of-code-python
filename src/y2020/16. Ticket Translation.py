@@ -1,3 +1,16 @@
+#!/usr/bin/env python3
+
+"""
+AoC Day 16 - Ticket Translation - in Python.
+
+Simple row-based solver which seems good enough to solve the given
+input. Contains a while loop but exits before entering a second loop
+for my input.
+"""
+
+__author__ = "Lucas Moeskops"
+__date__ = "2020-12-16"
+
 from math import prod
 from sys import stdin
 

@@ -1,5 +1,16 @@
-from sys import stdin
+#!/usr/bin/env python3
+
+"""
+AoC Day 6 - Custom Customs - in Python.
+
+With sets.
+"""
+
+__author__ = "Lucas Moeskops"
+__date__ = "2020-12-06"
+
 from functools import reduce
+from sys import stdin
 
 questions_any = lambda group: len(set(''.join(group.replace('\n', ''))))
 

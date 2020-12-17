@@ -1,6 +1,17 @@
-from sys import stdin
+#!/usr/bin/env python3
+
+"""
+AoC Day 3 - Toboggan Trajectory - in Python.
+
+Gliding over endless rows.
+"""
+
+__author__ = "Lucas Moeskops"
+__date__ = "2020-12-03"
+
 from functools import partial, reduce
 from math import prod
+from sys import stdin
 
 def trees(hill, slope):
     x, y = slope

@@ -1,5 +1,17 @@
-from sys import stdin
+#!/usr/bin/env python3
+
+"""
+AoC Day 9 - Encoding Error - in Python.
+
+Optimized finding the correct number sequence with Caterpillar method.
+Not optimizing still finds the solution very fast though.
+"""
+
+__author__ = "Lucas Moeskops"
+__date__ = "2020-12-09"
+
 from itertools import combinations
+from sys import stdin
 
 def find_invalid(numbers, num=25):
     options = range(num, len(numbers))

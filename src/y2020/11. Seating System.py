@@ -1,3 +1,14 @@
+#!/usr/bin/env python3
+
+"""
+AoC Day 11 - Seating System - in Python.
+
+Conway-like grid. Some optimizations for faster solving.
+"""
+
+__author__ = "Lucas Moeskops"
+__date__ = "2020-12-11"
+
 from collections import defaultdict
 from sys import stdin
 

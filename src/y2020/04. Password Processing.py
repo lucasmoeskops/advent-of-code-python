@@ -1,5 +1,16 @@
-from sys import stdin
+#!/usr/bin/env python3
+
+"""
+AoC Day 4 - Password Processing - in Python.
+
+Pattern matching!
+"""
+
+__author__ = "Lucas Moeskops"
+__date__ = "2020-12-04"
+
 from re import match
+from sys import stdin
 
 required = {'byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid'}
 

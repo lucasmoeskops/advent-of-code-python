@@ -1,3 +1,15 @@
+#!/usr/bin/env python3
+
+"""
+AoC Day 14 - Docking Data - in Python.
+
+Solver that only operators on integer values, using a nice
+fast bitwise permutation generator algorithm learned from Voltara.
+"""
+
+__author__ = "Lucas Moeskops"
+__date__ = "2020-12-14"
+
 from functools import reduce
 from re import match
 from sys import stdin
@@ -8,7 +20,8 @@ make_mask = (lambda op, c, m, s:
 add_mask      = lambda c, m: make_mask(int.__add__, c, m, 0)
 subtract_mask = lambda c, m: make_mask(int.__sub__, c, m, (2<<35) - 1)
 
-def permutations(mask):  # bit permutation-trick with credits to askalski
+def permutations(mask):
+    # bit permutation-trick with credits to askalski/Voltara
     n = -mask & mask
     yield 0
     while n != 0:

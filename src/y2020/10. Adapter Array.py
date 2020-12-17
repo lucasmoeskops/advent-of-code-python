@@ -1,3 +1,16 @@
+#!/usr/bin/env python3
+
+"""
+AoC Day 10 - Adapter Array - in Python.
+
+Combination count challenge. Short solution by "abusing" that all
+number differences are either 1 or 3, where only 1 generates multiple
+combinations. These are calculated independently and multiplied.
+"""
+
+__author__ = "Lucas Moeskops"
+__date__ = "2020-12-10"
+
 from collections import Counter
 from itertools import groupby
 from math import prod

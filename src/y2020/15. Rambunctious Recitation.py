@@ -1,3 +1,15 @@
+#!/usr/bin/env python3
+
+"""
+AoC Day 15 - Rambunctious Recitation - in Python.
+
+Solver that uses an array of length equal to the index that is
+requested to seen values.
+"""
+
+__author__ = "Lucas Moeskops"
+__date__ = "2020-12-15"
+
 from itertools import count
 from sys import stdin
 
