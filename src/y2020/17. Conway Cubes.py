@@ -8,7 +8,7 @@ Completes in about 18 seconds on my laptop.
 """
 
 __author__ = "Lucas Moeskops"
-__date__
+__date__ = "2020-12-17"
 
 from itertools import product
 from sys import stdin
