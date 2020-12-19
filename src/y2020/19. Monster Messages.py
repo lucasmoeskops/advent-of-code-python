@@ -13,19 +13,17 @@ from functools import reduce
 from itertools import chain
 from sys import stdin
 
-parse_option = lambda o: [(v[1:-1] if v[0] == '"' else int(v)) for v in o.split(' ')]
-
 def parse_rule(rule):
     number, rest = rule.split(':')
     options = rest[1:].split(' | ')
-    return (int(number), [parse_option(option) for option in options])
+    return (number, [option.split(' ') for option in options])
 
 def match_rule(rules, rule, message):
-    os, matching = rules[rule], True
+    os = rules[rule]
     fst = os[0][0]
-    if isinstance(fst, str):
-        if message.startswith(fst):
-            yield message[len(fst):]
+    if fst[0] == '"':
+        if message.startswith(fst[1:-1]):
+            yield message[len(fst)-2:]
         return
     # Go through all options and yield those for which all values match consecutively
     for vs in os:
@@ -34,7 +32,7 @@ def match_rule(rules, rule, message):
             vs,
             [message])
 
-valid_message = lambda r, m: '' in match_rule(r, 0, m)
+valid_message = lambda r, m: '' in match_rule(r, '0', m)
 
 rules_raw, messages_raw = stdin.read().split('\n\n')
 rules = dict(parse_rule(rule) for rule in rules_raw.split('\n'))
