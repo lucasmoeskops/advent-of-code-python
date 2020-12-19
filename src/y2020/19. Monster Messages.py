@@ -21,7 +21,8 @@ def parse_rule(rule):
     return (int(number), [parse_option(option) for option in options])
 
 def match_rule(rules, rule, message):
-    os, matching, fst = rules[rule], True, os[0][0]
+    os, matching = rules[rule], True
+    fst = os[0][0]
     if isinstance(fst, str):
         if message.startswith(fst):
             yield message[len(fst):]
