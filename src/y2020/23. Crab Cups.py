@@ -13,6 +13,14 @@ from itertools import islice
 from math import prod
 from sys import stdin
 
+decode = lambda i: i + 1
+encode = lambda i: i - 1
+
+def iterator_from(state, n):
+    for _ in range(len(state)):
+        n = state[n]
+        yield n
+
 def play(initial, total=0, moves=100):
     total = max(total, len(initial))
     state = [i + 1 for i in range(total)]
@@ -35,16 +43,7 @@ def play(initial, total=0, moves=100):
         current = state[current]
     return state
 
-def iterator_from(state, n):
-    for _ in range(len(state)):
-        n = state[n]
-        yield n
-
-decode = lambda i: i + 1
-encode = lambda i: i - 1
-
-order = stdin.read()
-initial = [encode(int(i)) for i in order]
+initial = [encode(int(i)) for i in stdin.read()]
 
 print(f'1: {"".join(str(decode(v)) for v in iterator_from(play(initial), 0))}')
 
