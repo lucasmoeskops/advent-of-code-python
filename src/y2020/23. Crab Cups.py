@@ -27,10 +27,9 @@ def play(initial, total=0, moves=100):
     state[-1] = initial[0]
     for i, v in enumerate(initial[1:]):
         state[initial[i]] = v
-    if total > len(initial):
-        state[initial[len(initial) - 1]] = len(initial)
+    state[initial[-1]] = len(initial) if total > len(initial) else initial[0]
     current = initial[0]
-    for _ in range(moves):
+    for g in range(moves):
         a = state[current]
         b = state[a]
         c = state[b]
