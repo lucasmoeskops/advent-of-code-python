@@ -103,36 +103,36 @@ parsePassword = let carefulSeparator = do oneOf "\n "
 parsePasswords :: String -> Either ParseError [Password]
 parsePasswords = parse (sepBy parsePassword (string "\n\n")) "unable to parse"
 
-getPropertyKey :: Property -> String
-getPropertyKey (Property (k, _))  = k
-getPropertyKey (BirthYear _)      = "byr"
-getPropertyKey (IssueYear _)      = "iyr"
-getPropertyKey (ExpirationYear _) = "eyr"
-getPropertyKey (Height _ _)       = "hgt"
-getPropertyKey (HairColor _)      = "hcl"
-getPropertyKey (EyeColor _)       = "ecl"
-getPropertyKey (PassportID _)     = "pid"
+keyFromProperty :: Property -> String
+keyFromProperty (Property (k, _))  = k
+keyFromProperty (BirthYear _)      = "byr"
+keyFromProperty (IssueYear _)      = "iyr"
+keyFromProperty (ExpirationYear _) = "eyr"
+keyFromProperty (Height _ _)       = "hgt"
+keyFromProperty (HairColor _)      = "hcl"
+keyFromProperty (EyeColor _)       = "ecl"
+keyFromProperty (PassportID _)     = "pid"
 
 hasRequiredProperties :: Password -> Bool
-hasRequiredProperties ps = let keys = map getPropertyKey ps
+hasRequiredProperties ps = let keys = map keyFromProperty ps
                            in all (`elem` keys) requiredProperties
 
-validateProperty :: Property -> Bool
-validateProperty (BirthYear y)      = liftA2 (&&) (1920 <=) (<= 2002) y
-validateProperty (IssueYear y)      = liftA2 (&&) (2010 <=) (<= 2020) y
-validateProperty (ExpirationYear y) = liftA2 (&&) (2020 <=) (<= 2030) y
-validateProperty (Height n Cm)      = liftA2 (&&) (150 <=) (<= 193) n
-validateProperty (Height n Inch)    = liftA2 (&&) (59 <=) (<= 76) n
-validateProperty (HairColor c)      = length c == 6
-validateProperty (PassportID x)     = length x == 9
-validateProperty _                  = True
+isValidProperty :: Property -> Bool
+isValidProperty (BirthYear y)      = liftA2 (&&) (1920 <=) (<= 2002) y
+isValidProperty (IssueYear y)      = liftA2 (&&) (2010 <=) (<= 2020) y
+isValidProperty (ExpirationYear y) = liftA2 (&&) (2020 <=) (<= 2030) y
+isValidProperty (Height n Cm)      = liftA2 (&&) (150 <=) (<= 193) n
+isValidProperty (Height n Inch)    = liftA2 (&&) (59 <=) (<= 76) n
+isValidProperty (HairColor c)      = length c == 6
+isValidProperty (PassportID x)     = length x == 9
+isValidProperty _                  = True
 
-validatePassword :: Password -> Bool
-validatePassword = liftA2 (&&) hasRequiredProperties (all validateProperty)
+isValidPassword :: Password -> Bool
+isValidPassword = liftA2 (&&) hasRequiredProperties (all isValidProperty)
 
 main :: IO ()
 main = do passwords <- parsePasswords <$> getContents
           let part1 = length . filter hasRequiredProperties <$> passwords
-          let part2 = length . filter validatePassword . map parsePropertyValues <$> passwords
+          let part2 = length . filter isValidPassword . map parsePropertyValues <$> passwords
           putStr $  "1: " ++ either show show part1
                  ++ "\n2: " ++ either show show part2 ++ "\n"
