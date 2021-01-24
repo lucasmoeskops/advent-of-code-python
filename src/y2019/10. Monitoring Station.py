@@ -42,6 +42,8 @@ best_asteroid = max(asteroids, key=partial(sight_count, asteroids))
 groups = asteroid_groups(asteroids, best_asteroid)
 distance = partial(relative_position, *best_asteroid)
 # Assumption here: 200 is less than the solution of part 1
+# If not we would have to discard sets of closest items until discarding another
+# layer would discard the 200th and continue with the remaining items instead.
 closest = [min(g, key=lambda p: sum(distance(*p))) for g in groups.values()]
 target_asteroid = sorted(closest, key=lambda p: rotation_order(*distance(*p)))[199]
 
