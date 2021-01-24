@@ -36,7 +36,7 @@ asteroids = [(i % width, i // width) for i, c in enumerate(field) if c == '#']
 print(f'1: {max(map(partial(sight_count, asteroids), asteroids))}')
 
 def rotation_order(x, y):
-    return (pi - atan2(x, y))
+    return pi - atan2(x, y)
 
 best_asteroid = max(asteroids, key=partial(sight_count, asteroids))
 groups = asteroid_groups(asteroids, best_asteroid)
