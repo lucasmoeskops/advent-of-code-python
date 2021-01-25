@@ -94,14 +94,13 @@ def run(program, initial=0):
 
 
 program = [int(line) for line in stdin.read().split(',')]
-data = run(program)
-print(f'1: {len(data)}')
+print(f'1: {len(run(program))}')
+
+def format_row(data, sx, ex, y):
+    return ''.join(str(data.get((x, y), 0)) for x in range(sx, ex + 1))
 
 data = run(program, initial=1)
 xs, ys = tee(map(itemgetter(0), data), 2), tee(map(itemgetter(1), data), 2)
-sx, ex = min(xs[0]), max(xs[1])
-sy, ey = min(ys[0]), max(ys[1])
-output = '\n'.join(
-    ''.join(str(data.get((x, y), 0)) for x in range(sx, ex + 1))
-     for y in range(sy, ey + 1)).replace('0', ' ')
-print(f'2: \n{output}')
+sx, ex, sy, ey = min(xs[0]), max(xs[1]), min(ys[0]), max(ys[1])
+output = '\n'.join(map(partial(format_row, data, sx, ex), range(sy, ey + 1)))
+print(f'2: \n{output.replace("0", " ")}')
