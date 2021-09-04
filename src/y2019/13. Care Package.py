@@ -8,8 +8,7 @@ __date__ = "2021-09-04"
 from collections import defaultdict, deque
 from enum import Enum
 from functools import partial
-from itertools import count, tee
-from operator import itemgetter
+from itertools import count
 from sys import stdin
 
 class Tile(Enum):
@@ -84,22 +83,6 @@ def step(state):
         stalled = True
     return position, program, halted, stalled, rel_base, in_, out_
 
-def run(program, initial=0):
-    halted, in_, out_, position = False, deque(), deque(), (0, 0)
-    runner = make_runner(program, in_, out_)
-    data = {position: initial}
-    direction = 0
-    while not halted:
-        in_.append(data.get(position, 0))
-        halted, *_ = next(runner)
-        if not halted:
-            data[position] = out_.popleft()
-            direction = (direction + (1 if out_.popleft() else -1)) % 4
-            position =\
-                position[0] + (direction % 2) * (-direction + 2),\
-                position[1] + (not direction % 2) * (direction - 1),
-    return data
-
 program = [int(code) for code in stdin.read().split(',')]
 out = []
 next(make_runner(program, [], out))
@@ -110,15 +93,12 @@ def play(program):
     halted, in_, out_, score, ball_x, paddle_x = False, deque(), deque(), 0, 0, 0
     program = make_runner(program, in_, out_)
     halted, *_ = next(program)
-    from collections import Counter
-    c = Counter()
     
     while True:
         while out_:
             x, y, t = out_.popleft(), out_.popleft(), out_.popleft()
 
             if x == -1:
-                c[t - score] += 1
                 score = t
                 continue
             
@@ -132,7 +112,7 @@ def play(program):
             halted, *_ = next(program)
         else:
             break
-        
+
     return score
 
 program[0] = 2
