@@ -33,8 +33,8 @@ def task_1():
 
 
 def task_2():
-    summer = sliding_sum(3)
-    return sum(a < b for a, b in pairwise(summer(ints)))
+    window = sliding_sum(3)
+    return sum(a < b for a, b in pairwise(window(ints)))
 
 
 print(f'1: {task_1()}')
