@@ -6,11 +6,11 @@
 
 slidingWindow size ns = if null$drop (size - 1) ns then [] else (sum$take size ns) : slidingWindow size (drop 1 ns)
 
-task_1 numbers = length$filter (==True)$zipWith (<) numbers (drop 1 numbers)
-task_2 numbers = length$filter (==True)$zipWith (<) window (drop 1 window) where window = slidingWindow 3 numbers
+task_1 ns = length$filter (==True)$zipWith (<) ns (drop 1 ns)
+task_2 ns = length$filter (==True)$zipWith (<) window (drop 1 window) where window = slidingWindow 3 ns
 
 {- Using a + b + c < b + c + d === a < d -}
-task_2_cp numbers = length$filter (==True)$zipWith (<) numbers (drop 3 numbers)
+task_2_cp ns = length$filter (==True)$zipWith (<) ns (drop 3 ns)
 
 parse :: String -> [Int]
 parse = map read.lines

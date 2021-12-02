@@ -10,17 +10,17 @@ task_1 = run 0 0
         run position depth []                      = position * depth
         run position depth ((direction,amount):cs) =
             case direction of
-                "forward" -> run (position + amount) depth cs
-                "up"      -> run position (depth - amount) cs
-                "down"    -> run position (depth + amount) cs
+                "forward" -> run (position + amount) depth            cs
+                "up"      -> run position            (depth - amount) cs
+                "down"    -> run position            (depth + amount) cs
 task_2 = run 0 0 0
     where
         run position depth aim []                      = position * depth
         run position depth aim ((direction,amount):cs) =
             case direction of
-                "forward" -> run (position + amount) (depth + amount * aim) aim cs
-                "up"      -> run position depth (aim - amount) cs
-                "down"    -> run position depth (aim + amount) cs
+                "forward" -> run (position + amount) (depth + amount * aim) aim            cs
+                "up"      -> run position            depth                  (aim - amount) cs
+                "down"    -> run position            depth                  (aim + amount) cs
 
 parse :: String -> [(String, Int)]
 parse = map parseLine.lines
