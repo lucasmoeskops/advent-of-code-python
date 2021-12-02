@@ -10,10 +10,10 @@ Obtain an input file from adventofcode.com for the puzzle you want to run. Assum
 
 Python version 3.10.0 is required.
 
-```shell python3 path/to/file.py < input.txt```
+```shell python3 path/to/file.py < path/to/input.txt```
 
 ### Haskell
 
 [Work in progress]
 
-```runghc path/to/file.hs < input.txt```
+```runghc path/to/file.hs < path/to/input.txt```

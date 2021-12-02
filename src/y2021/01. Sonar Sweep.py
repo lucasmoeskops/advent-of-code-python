@@ -10,6 +10,7 @@ __date__ = "2021-12-01"
 from itertools import islice, pairwise, tee
 from sys import stdin
 
+from helpers import timed
 
 full = stdin.read()
 lines = full.split('\n')
@@ -28,14 +29,23 @@ def sliding_sum(size):
     return iterate
 
 
+@timed
 def task_1():
     return sum(a < b for a, b in pairwise(ints))
 
 
+@timed
 def task_2():
     window = sliding_sum(3)
     return sum(a < b for a, b in pairwise(window(ints)))
 
 
-print(f'1: {task_1()}')
-print(f'2: {task_2()}')
+@timed
+def task_2_cp():
+    """ Making use of a + b + c < b + c + d === a < d """
+    return sum(a < b for a, b in zip(ints, ints[3:]))
+
+
+print(f'[Part 1] [Comparing pairs]: {task_1()}')
+print(f'[Part 2] [Sliding window]: {task_2()}')
+print(f'[Part 2] [Comparing pairs]: {task_2_cp()}')

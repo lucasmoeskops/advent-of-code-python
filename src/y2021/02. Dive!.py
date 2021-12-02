@@ -11,6 +11,7 @@ import re
 from operator import itemgetter
 from sys import stdin
 
+from helpers import timed
 
 full = stdin.read()
 lines = full.split('\n')
@@ -26,6 +27,7 @@ for line in lines:
         parsed.append(r)
 
 
+@timed
 def task_1():
     position, depth = 0, 0
     commands = map(itemgetter('direction', 'amount'), parsed)
@@ -40,6 +42,7 @@ def task_1():
     return position * depth
 
 
+@timed
 def task_2():
     aim, position, depth = 0, 0, 0
     commands = map(itemgetter('direction', 'amount'), parsed)
