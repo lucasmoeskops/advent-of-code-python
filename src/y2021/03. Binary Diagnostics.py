@@ -8,8 +8,6 @@ __author__ = "Lucas Moeskops"
 __date__ = "2021-12-03"
 
 from functools import reduce
-from collections import Counter
-from operator import itemgetter
 
 from sys import stdin
 
@@ -25,34 +23,24 @@ def str2bin(s):
 
 @timed
 def task_1():
-    gamma_rate = [Counter(p).most_common(1)[0][0] for p in zip(*lines)]
-    epsilon_rate = [Counter(p).most_common(2)[-1][0] for p in zip(*lines)]
+    gamma_rate = ''.join(max('01', key=p.count) for p in zip(*lines))
+    epsilon_rate = gamma_rate.replace('0', '2').replace('1', '0').replace('2', '1')
     return str2bin(gamma_rate) * str2bin(epsilon_rate)
 
 
-def build_reducer(_type_, on_equal):
+def build_reducer(_filter_, order):
     def reducer(candidates, i):
-        counts = Counter(map(itemgetter(i), candidates)).most_common()
-        equal = len(counts) == 2 and counts[0][1] == counts[1][1]
-        if equal:
-            target = on_equal
-        elif _type_ == 'most_common':
-            target = counts[0][0]
-        else:
-            target = counts[-1][0]
-        return [c for c in candidates if c[i] == target]
+        col = ''.join(c[i] for c in candidates)
+        target = _filter_(order, key=col.count)
+        return [c for c in candidates if c[i] == target] or candidates
     return reducer
 
 
 @timed
 def task_2():
     n = len(lines[0])
-    oxygen_generator_rating = (
-      reduce(build_reducer('most_common', '1'), range(n), lines)[0]
-    )
-    co2_scrubber_rating = (
-        reduce(build_reducer('least_common', '0'), range(n), lines)[0]
-    )
+    oxygen_generator_rating = reduce(build_reducer(max, '10'), range(n), lines)[0]
+    co2_scrubber_rating = reduce(build_reducer(min, '01'), range(n), lines)[0]
     return str2bin(oxygen_generator_rating) * str2bin(co2_scrubber_rating)
 
 
