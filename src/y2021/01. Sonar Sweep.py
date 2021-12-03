@@ -12,8 +12,7 @@ from sys import stdin
 
 from helpers import timed
 
-full = stdin.read()
-lines = full.split('\n')
+lines = stdin.read().split('\n')
 ints = [int(line) for line in lines if line]
 
 

@@ -13,8 +13,7 @@ from sys import stdin
 
 from helpers import timed
 
-full = stdin.read()
-lines = full.split('\n')
+lines = stdin.read().split('\n')
 
 parser_re = r'(?P<direction>\w+) (?P<amount>\d+)'
 parser_map = {'amount': int}
