@@ -8,7 +8,6 @@ __author__ = "Lucas Moeskops"
 __date__ = "2021-12-03"
 
 from functools import reduce
-
 from sys import stdin
 
 from helpers import timed
@@ -20,7 +19,7 @@ lines = full.split('\n')
 @timed
 def task_1():
     gamma_rate = ''.join(max('01', key=p.count) for p in zip(*lines))
-    epsilon_rate = gamma_rate.replace('0', '2').replace('1', '0').replace('2', '1')
+    epsilon_rate = gamma_rate.translate(''.maketrans(*'01'))
     return int(gamma_rate, 2) * int(epsilon_rate, 2)
 
 
