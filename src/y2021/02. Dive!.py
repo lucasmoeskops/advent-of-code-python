@@ -7,23 +7,16 @@ AoC Day 2 - Dive! - in Python.
 __author__ = "Lucas Moeskops"
 __date__ = "2021-12-02"
 
-import re
 from operator import itemgetter
 from sys import stdin
 
-from helpers import timed
+from helpers import timed, parse_from_re
 
 lines = stdin.read().split('\n')
 
 parser_re = r'(?P<direction>\w+) (?P<amount>\d+)'
 parser_map = {'amount': int}
-parsed = []
-for line in lines:
-    if match := re.match(parser_re, line):
-        r = match.groupdict()
-        for k, v in r.items():
-            r[k] = parser_map.get(k, str)(v)
-        parsed.append(r)
+parsed = list(parse_from_re(parser_re, parser_map, lines))
 
 
 @timed

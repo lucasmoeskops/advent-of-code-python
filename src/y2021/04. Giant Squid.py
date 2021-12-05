@@ -5,7 +5,7 @@ AoC Day 4 - Giant Squid - in Python.
 """
 
 __author__ = "Lucas Moeskops"
-__date__ = "2021-12-04"
+__date__ = "2021-12-05"
 
 from collections import Counter
 from dataclasses import dataclass

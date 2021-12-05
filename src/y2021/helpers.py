@@ -1,4 +1,15 @@
+import re
 from time import time
+
+
+def parse_from_re(parser_re, parser_map=None, lines=()):
+    parser_map = {} if parser_map is None else parser_map
+    for line in lines:
+        if match := re.match(parser_re, line):
+            r = match.groupdict()
+            for k, v in r.items():
+                r[k] = parser_map.get(k, str)(v)
+            yield r
 
 
 def human_time(t):
