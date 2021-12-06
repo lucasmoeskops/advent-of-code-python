@@ -17,28 +17,24 @@ from helpers import timed
 initial = [int(v) for v in stdin.read().split(',')]
 
 
-def simulate(per_day):
-    at_zero = per_day.popleft()
-    per_day[-2] += at_zero
-    per_day.append(at_zero)
+def find_population(num_days):
+    counter = Counter(initial)
+    per_day = deque([counter[i] for i in range(9)])
+    for i in range(num_days):
+        at_zero = per_day.popleft()
+        per_day[-2] += at_zero
+        per_day.append(at_zero)
+    return sum(per_day)
 
 
 @timed
 def task_1():
-    counter = Counter(initial)
-    per_day = deque([counter[i] for i in range(9)])
-    for i in range(80):
-        simulate(per_day)
-    return sum(per_day)
+    return find_population(80)
 
 
 @timed
 def task_2():
-    counter = Counter(initial)
-    per_day = deque([counter[i] for i in range(9)])
-    for i in range(256):
-        simulate(per_day)
-    return sum(per_day)
+    return find_population(256)
 
 
 print(f'[Part 1]: {task_1()}')
