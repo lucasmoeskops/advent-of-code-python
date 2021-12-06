@@ -16,20 +16,18 @@ from sys import stdin
 from helpers import timed
 
 
-@dataclass
 class Board:
     def __init__(self, data):
-        xs = cycle(range(5))
-        ys = chain.from_iterable(repeat(n, 5) for n in count())
-        self.lookup = {value: (x, y) for value, x, y in zip(data, xs, ys)}
+        self.lookup = {value: i for i, value in enumerate(data)}
         self.row_status = Counter()
         self.col_status = Counter()
         self.final_value = None
 
     def play(self, value):
         self.final_value = value
-        x, y = self.lookup.get(value, (-1, -1))
-        if x >= 0:
+        i = self.lookup.get(value)
+        if i is not None:
+            y, x = divmod(i, 5)
             del self.lookup[value]
             row_value = self.row_status[x] = self.row_status[x] + 1
             if row_value == 5:
