@@ -30,18 +30,18 @@ def game():
         yield scores
 
 
-def determine_winner(_num_marbles_):
+def determine_winner_score(_num_marbles_):
     return max(next(islice(game(), _num_marbles_, _num_marbles_ + 1)).values())
 
 
 @timed
 def task_1():
-    return determine_winner(num_marbles)
+    return determine_winner_score(num_marbles)
 
 
 @timed
 def task_2():
-    return determine_winner(num_marbles * 100)
+    return determine_winner_score(num_marbles * 100)
 
 
 print(f'[Part 1]: {task_1()}')
