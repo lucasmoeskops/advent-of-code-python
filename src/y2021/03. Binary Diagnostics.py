@@ -8,6 +8,7 @@ __author__ = "Lucas Moeskops"
 __date__ = "2021-12-03"
 
 from functools import reduce
+from itertools import tee
 from sys import stdin
 
 from helpers import timed
@@ -22,19 +23,21 @@ def task_1():
     return int(gamma_rate, 2) * int(epsilon_rate, 2)
 
 
-def build_reducer(_filter_, order):
-    def reducer(candidates, i):
-        col = ''.join(c[i] for c in candidates)
-        target = _filter_(order, key=col.count)
-        return [c for c in candidates if c[i] == target] or candidates
-    return reducer
+def find_match(_filter_, order, candidates):
+    def inner(cs, i=0):
+        if len(cs) == 1:
+            return cs[0]
+        col = [c[i] for c in cs]
+        target = _filter_([c for c in order if c in col], key=col.count)
+        cs = [c for c in cs if c[i] == target]
+        return inner(cs, i + 1)
+    return inner(candidates)
 
 
 @timed
 def task_2():
-    n = len(lines[0])
-    oxygen_generator_rating = reduce(build_reducer(max, '10'), range(n), lines)[0]
-    co2_scrubber_rating = reduce(build_reducer(min, '01'), range(n), lines)[0]
+    oxygen_generator_rating = find_match(max, '10', lines)
+    co2_scrubber_rating = find_match(min, '01', lines)
     return int(oxygen_generator_rating, 2) * int(co2_scrubber_rating, 2)
 
 
