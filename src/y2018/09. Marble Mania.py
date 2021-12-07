@@ -22,10 +22,8 @@ def game():
     scores = defaultdict(int)
     for m, p in zip(count(start=1), cycle(range(num_players))):
         if not m % 23:
-            scores[p] += m
             circle.rotate(7)
-            scores[p] += circle.pop()
-            circle.rotate(-1)
+            scores[p] += m + circle.popleft()
         else:
             circle.rotate(-1)
             circle.append(m)
