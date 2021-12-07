@@ -1,46 +1,50 @@
+#!/usr/bin/env python3
+
+"""
+AoC Day 9 - Marble Mania - in Python.
+"""
+
+__author__ = "Lucas Moeskops"
+__date__ = "2021-12-07"
+
+from collections import deque, defaultdict
+from itertools import cycle, count, islice
 from sys import stdin
-from collections import defaultdict
-from functools import partial, reduce
 
-class Marble:
-    def __init__(self, number, previous=None, next=None):
-        self.number = number
-        self.previous = previous or self
-        self.next = next or self
-
-    def travel(self, steps):
-        if steps > 0:
-            return self.next.travel(steps - 1)
-        return self if steps == 0 else self.previous.travel(steps + 1)
-
-    def insert_after(self, number):
-        new_marble = self.next.previous = self.next = Marble(number, self, self.next)
-        return new_marble
-
-    def remove(self):
-        self.previous.next = self.next
-        self.next.previous = self.previous
-        self.next = self.previous = self
-        return self
-
-def new_circle():
-    return Marble(0)
-
-def place_marble(num_players, scores, current: Marble, number: int):
-    if number % 23:
-        return current.travel(1).insert_after(number)
-    current = current.travel(-6)
-    removed = current.travel(-1).remove()
-    scores[number % num_players] += number + removed.number
-    return current
-
-def play(num_players, num_marbles):
-    scores = defaultdict(int)
-    reduce(partial(place_marble, num_players, scores), range(1, num_marbles), new_circle())
-    return max(scores.values())
+from helpers import timed
 
 words = stdin.read().split(' ')
 num_players, num_marbles = map(int, [words[0], words[6]])
 
-print(f'1: {play(num_players, num_marbles)}')
-print(f'2: {play(num_players, num_marbles * 100)}')
+
+def game():
+    circle = deque([0])
+    scores = defaultdict(int)
+    for m, p in zip(count(start=1), cycle(range(num_players))):
+        if not m % 23:
+            scores[p] += m
+            circle.rotate(7)
+            scores[p] += circle.pop()
+            circle.rotate(-1)
+        else:
+            circle.rotate(-1)
+            circle.append(m)
+        yield scores
+
+
+def determine_winner(_num_marbles_):
+    return max(next(islice(game(), _num_marbles_, _num_marbles_ + 1)).values())
+
+
+@timed
+def task_1():
+    return determine_winner(num_marbles)
+
+
+@timed
+def task_2():
+    return determine_winner(num_marbles * 100)
+
+
+print(f'[Part 1]: {task_1()}')
+print(f'[Part 2]: {task_2()}')
