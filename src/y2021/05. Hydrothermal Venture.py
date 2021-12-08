@@ -35,7 +35,7 @@ def task_1():
             _x1_, _x2_ = sorted([x1, x2])
             for x in range(_x1_, _x2_ + 1):
                 field[(x, y1)] += 1
-    return len([p for p in field.values() if p >= 2])
+    return sum(1 for p in field.values() if p >= 2)
 
 
 @timed
@@ -50,7 +50,7 @@ def task_2():
         fill_value = x1 if x1 == x2 else y1
         for x, y in zip_longest(rx, ry, fillvalue=fill_value):
             field[(x, y)] += 1
-    return len([p for p in field.values() if p >= 2])
+    return sum(1 for p in field.values() if p >= 2)
 
 
 print(f'[Part 1]: {task_1()}')
