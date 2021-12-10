@@ -9,7 +9,6 @@ __date__ = "2021-12-09"
 
 from collections import Counter
 from functools import cache
-
 from math import prod
 from sys import stdin
 
