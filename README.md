@@ -1,6 +1,6 @@
 # Advent of Code
 
-Solutions to Advent of Code problems.
+Solutions to Advent of Code problems. The code for the solutions is adjusted after submitting it for the challenge to how I think it is most readable or fastest or preferably both.
 
 ## How to run
 

@@ -14,54 +14,45 @@ from helpers import timed
 
 lines = stdin.read().split('\n')
 octopuses = {(x, y): int(v) for y, line in enumerate(lines) for x, v in enumerate(line)}
-bounds = [0, len(lines[0]), len(lines), 0]
+width, height = (len(lines[0]), len(lines))
 
 
 def neighbours_diagonal(x, y):
-    return (
-        (x, y - 1),
-        (x + 1, y - 1),
-        (x + 1, y),
-        (x + 1, y + 1),
-        (x, y + 1),
-        (x - 1, y + 1),
-        (x - 1, y),
-        (x - 1, y - 1),
-    )
+    for d in range(-1, 2):
+        for e in range(-1, 2):
+            if d or e:
+                yield x + d, y + e
 
 
 def step(_octopuses_):
-    updates = {p: v + 1 for p, v in _octopuses_.items()}
-    done = set()
     recheck = True
-    first = True
+    flashed = 0
+    for p, v in _octopuses_.items():
+        _octopuses_[p] = v + 1
     while recheck:
         recheck = False
-        for p, v in updates.items():
-            if v > 9 and p not in done:
-                done.add(p)
+        for p, v in _octopuses_.items():
+            if v > 9:
+                flashed += 1
+                _octopuses_[p] = 0
                 recheck = True
-                for n in neighbours_diagonal(*p):
-                    if n in _octopuses_:
-                        updates[n] = updates[n] + 1
-        if first and len(done) == bounds[2] * bounds[1]:
-            return -1
-        first = False
-    updates.update({p: 0 for p in done})
-    _octopuses_.update(updates)
-    return len(done)
+                for (x, y) in neighbours_diagonal(*p):
+                    if 0 <= x < width and 0 <= y < height:
+                        if nv := _octopuses_[(x, y)]:
+                            _octopuses_[(x, y)] = nv + 1
+    return flashed
 
 
 @timed
 def task_1():
-    _octopuses_ = {k: v for k, v in octopuses.items()}
+    _octopuses_ = octopuses.copy()
     return sum(step(_octopuses_) for _ in range(100))
 
 
 @timed
 def task_2():
-    _octopuses_ = {k: v for k, v in octopuses.items()}
-    return next(dropwhile(lambda _: step(_octopuses_) >= 0, count(1)))
+    _octopuses_, num = octopuses.copy(), width * height
+    return next(dropwhile(lambda _: step(_octopuses_) != num, count(1)))
 
 
 print(f'[Part 1]: {task_1()}')
