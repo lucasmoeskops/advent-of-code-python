@@ -17,10 +17,6 @@ lines = stdin.read().strip().split('\n')
 nodes = [line.split('-') for line in lines]
 
 
-def neighbours(x, y):
-    return (x, y - 1), (x + 1, y), (x, y + 1), (x - 1, y)
-
-
 def make_map():
     m = defaultdict(list)
     for _from_, to in nodes:
