@@ -7,40 +7,43 @@ AoC Day 13 - Transparent Origami - in Python.
 __author__ = "Lucas Moeskops"
 __date__ = "2021-12-13"
 
-from functools import reduce
+from collections import deque
 from operator import itemgetter
 
 from sys import stdin
 
 from helpers import timed, parse_from_re
 
-full = stdin.read()
-part1, part2 = full.split('\n\n')
+part1, part2 = stdin.read().split('\n\n')
 dots = [tuple(int(v) for v in dot.split(',')) for dot in part1.split('\n')]
-parser_re = r'fold along (?P<axis>\w+)=(?P<point>\d+)'
-parser_map = {'point': int}
-instructions = list(parse_from_re(parser_re, parser_map, part2.split('\n')))
+parser_re = r'fold along (?P<axis>\w+)=(?P<pivot>\d+)'
+instructions = list(parse_from_re(parser_re, {'pivot': int}, part2.split('\n')))
+g = None
 
 
-def make_map():
-    return {p for p in dots}
+def fold(axis, pivot, _map_):
+    double = 2 * pivot
+    return {
+        (
+            x if axis == 'y' or x < pivot else double - x,
+            y if axis == 'x' or y < pivot else double - y,
+        )
+        for x, y in _map_
+    }
 
 
-def fold(axis, point, _map_):
-    new = set()
-    t = 0 if axis == 'x' else 1
-    for p in _map_:
-        if p[t] < point:
-            new.add(p)
-        else:
-            new.add((-p[t] + 2 * point, p[(t + 1) % 2])[::-1 if t else 1])
-    return new
+def generator():
+    _map_ = set(dots)
+    for i in map(itemgetter('axis', 'pivot'), instructions):
+        _map_ = fold(*i, _map_)
+        yield _map_
 
 
 @timed
 def task_1():
-    getter, _map_ = itemgetter('axis', 'point'), make_map()
-    return len(fold(instructions[0]['axis'], instructions[0]['point'], _map_))
+    global g
+    g = g or generator()
+    return len(next(g))
 
 
 def read_map(_map_):
@@ -66,9 +69,9 @@ def read_map(_map_):
 
 @timed
 def task_2():
-    getter = itemgetter('axis', 'point')
-    _map_ = reduce(lambda m, i: fold(*i, m), map(getter, instructions), make_map())
-    return ''.join(read_map(_map_))
+    global g
+    g = g or generator()
+    return ''.join(read_map(deque(g, maxlen=1).pop()))
 
 
 print(f'[Part 1]: {task_1()}')
