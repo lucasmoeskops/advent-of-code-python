@@ -9,7 +9,6 @@ __date__ = "2021-12-13"
 
 from collections import deque
 from operator import itemgetter
-
 from sys import stdin
 
 from helpers import timed, parse_from_re
@@ -48,23 +47,29 @@ def task_1():
 
 def read_map(_map_):
     width, height = (max(column) + 1 for column in zip(*map(itemgetter(0, 1), _map_)))
-    for x in range(0, width, 5):  # A C E F H K L Z
-        if (x + 3, 5) in _map_:  # A E H K L Z
-            if (x + 1, 0) in _map_:  # A E Z
+    for x in range(0, width, 5):  # A B C E F G H K L P R U Z
+        if (x + 3, 5) in _map_:  # A E G H K L R Z
+            if (x + 1, 0) in _map_:  # A E G R Z
                 if (x + 3, 0) in _map_:  # E Z
                     yield 'E' if (x, 1) in _map_ else 'Z'
-                else:  # A
-                    yield 'A'
+                else:  # A G R
+                    if (x, 0) in _map_:  # 'R'
+                        yield 'R'
+                    else:  # A G
+                        yield 'A' if (x, 5) in _map_ else 'G'
             else:  # H K L
                 if (x + 3, 0) in _map_:  # H, K
                     yield 'H' if (x + 2, 2) in _map_ else 'K'
                 else:  # L
                     yield 'L'
-        else:  # C F J
-            if (x + 3, 0) in _map_:  # F J
-                yield 'F' if (x, 5) in _map_ else 'J'
-            else:  # C
-                yield 'C'
+        else:  # B C F J P U
+            if (x + 1, 0) in _map_:  # B C F P
+                if (x + 2, 2) in _map_:  # B F
+                    yield 'F' if (x + 3, 0) in _map_ else 'B'
+                else:  # C P
+                    yield 'C' if (x + 1, 5) in _map_ else 'P'
+            else:  # J U
+                yield 'U' if (x, 0) in _map_ else 'J'
 
 
 @timed
