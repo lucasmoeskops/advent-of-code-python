@@ -65,7 +65,7 @@ def task_1():
 
 def find_best_route(x, y):
     worst = (x + y) * 8
-    heap = [(worst, (0, 0, 0, condition_at(x, y), TORCH))]
+    heap = [(worst, (0, 0, 0, condition_at(0, 0), TORCH))]
     heapify(heap)
     best_at = {}
     while heap:

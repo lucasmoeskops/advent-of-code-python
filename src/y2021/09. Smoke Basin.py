@@ -12,14 +12,10 @@ from functools import cache
 from math import prod
 from sys import stdin
 
-from helpers import timed
+from helpers import neighbours, timed
 
 lines = stdin.read().split('\n')
 coords = {(x, y): int(v) for y, line in enumerate(lines) for x, v in enumerate(line)}
-
-
-def neighbours(x, y):
-    return (x, y - 1), (x + 1, y), (x, y + 1), (x - 1, y)
 
 
 @timed

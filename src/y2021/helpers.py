@@ -2,6 +2,10 @@ import re
 from time import time
 
 
+def neighbours(x, y):
+    return (x, y - 1), (x + 1, y), (x, y + 1), (x - 1, y)
+
+
 def parse_from_re(parser_re, parser_map=None, lines=()):
     parser_map = {} if parser_map is None else parser_map
     for line in lines:
