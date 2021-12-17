@@ -15,6 +15,8 @@ from sys import stdin
 from helpers import timed
 
 raw_packet = stdin.read()
+version_sum = 0
+message = None
 
 OPERATOR = [sum, prod, min, max, None, int.__gt__, int.__lt__, int.__eq__]
 
@@ -30,41 +32,17 @@ def read(it, length):
     return int(''.join(islice(it, length)), 2)
 
 
-def calculate_version_sum(packet, subpackets=None):
-    packet_it = iter(packet)
-    version_sum = 0
+def parse_packet(packet, sub_packets=None):
+    global version_sum
+    data, packet_it = [], iter(packet)
     read_it = partial(read, packet_it)
-    while True and (subpackets is None or (subpackets := subpackets - 1) >= 0):
+    while sub_packets is None or (sub_packets := sub_packets - 1) >= 0:
         try:
             version_sum += read_it(3)
             type_id = read_it(3)
             if type_id == 4:
-                while read_it(5) > 0xf:
-                    pass
-            else:
-                length_id = read_it(1)
-                if length_id == 0:
-                    length = read_it(15)
-                    version_sum += calculate_version_sum(list(islice(packet_it, length)))
-                elif length_id == 1:
-                    version_sum += calculate_version_sum(packet_it, read_it(11))
-        except (StopIteration, ValueError):
-            break
-    return version_sum
-
-
-def parse_packet(packet, subpackets=None):
-    data = []
-    packet_it = iter(packet)
-    read_it = partial(read, packet_it)
-    while True and (subpackets is None or (subpackets := subpackets - 1) >= 0):
-        try:
-            _, type_id = read_it(3), read_it(3)
-            if type_id == 4:
                 subdata = []
                 while group := list(islice(packet_it, 5)):
-                    if len(group) < 5:
-                        break
                     subdata.append(''.join(group[1:]))
                     if group[0] == '0':
                         data.append(int(''.join(subdata), 2))
@@ -76,19 +54,24 @@ def parse_packet(packet, subpackets=None):
                 elif length_id == 1:
                     d = parse_packet(packet_it, read_it(11))
                 data.append(OPERATOR[type_id](*[d] if type_id < 4 else d))
-        except (StopIteration, ValueError):
+        except ValueError:
             break
     return data
 
 
 @timed
 def task_1():
-    return calculate_version_sum(parse_raw_packet())
+    if version_sum == 0:
+        parse_packet(parse_raw_packet())
+    return version_sum
 
 
 @timed
 def task_2():
-    return parse_packet(parse_raw_packet())[0]
+    global message
+    if message is None:
+        message = ''.join(map(str, parse_packet(parse_raw_packet())))
+    return message
 
 
 print(f'[Part 1]: {task_1()}')
