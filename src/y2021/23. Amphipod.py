@@ -99,7 +99,7 @@ def wrongly_placed(_amphipods_, num):
 def find_cheapest_route(_amphipods_, coords, num):
     heap = [(0, (0, _amphipods_))]
     heapify(heap)
-    i = 0
+    seen = set()
     best = 1000000
     while heap:
         h, (energy, amphipods_raw) = heappop(heap)
@@ -118,9 +118,13 @@ def find_cheapest_route(_amphipods_, coords, num):
             a = dict(amphipods_raw)
             a[(x, y)] = a[(sx, sy)]
             del a[(sx, sy)]
+            r = tuple((x, y, l) for (x, l), l in a.items())
+            if r in seen:
+                continue
+            seen.add(r)
             d = 3 + 2 * "ABCD".index(_amphipods_[(sx, sy)])
             if energy + e + rough_rating(a) < best:
-                heappush(heap, (h + abs(x - d) * e, (energy + e, a.items())))
+                heappush(heap, (h + (abs(x - d) - abs(sx - d)) * e, (energy + e, a.items())))
     return best
 
 
