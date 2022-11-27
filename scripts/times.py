@@ -56,7 +56,10 @@ first_message = f'Advent of Code {year} runtimes'
 print(message_align(first_message, sum(widths)+2*len(widths), align_character='='))
 total_runtime = 0
 
-for day in range(1, 24):
+for day in range(1, 26):
+    if date(year, 12, day) > date.today():
+        continue
+
     day_message = message_align(f'Day {" " if day < 10 else ""}{day}', widths[0], align_character=' ', align=-1)
     title_message = message_align(' ', widths[1], side_character='|', align_character=' ')
     runtime_message = message_align(' ', widths[2], align_character=' ')

@@ -38,16 +38,27 @@ def message_align(message, length, align_character='-', spacing=1, side_characte
     return f'{side_character}{align_character * left}{" "*spacing}{message}{" "*spacing}{align_character * right}{side_character}'
 
 
-flags = [x[1:] for x in argv if x.startswith('-')]
+flags = [y for x in argv if x.startswith('-') for y in x[1:]]
 rest = [x for x in argv if not x.startswith('-')]
 
 day = int(rest[1]) if len(argv) > 1 else date.today().day
 year = int(rest[2]) % 100 if len(argv) > 2 else date.today().year % 100
 year += 2000
 
-interactive = 'i' in flags
 direct = 'd' in flags
+interactive = 'i' in flags
+copy_to_pasteboard = 'p' in flags
 do_submit = 's' in flags
+
+if direct and copy_to_pasteboard:
+    print('Direct and copy to pasteboard can not be used together')
+    quit()
+if direct and do_submit:
+    print('Direct and submit can not be used together')
+    quit()
+if interactive and do_submit:
+    print('Interactive and do submit are not allowed together')
+    quit()
 
 error = module = script_name = script_path = ''
 buffer = script_spec = None
@@ -144,7 +155,7 @@ if not direct:
                 webbrowser.open(f"https://adventofcode.com/{year}/day/{day}#part2")
             if "That's not the right answer" in message:
                 print(message)
-    elif which('pbcopy'):
+    if copy_to_pasteboard and which('pbcopy'):
         last = part2 if part2 else part1
         subprocess.run("pbcopy", text=True, input=last)
         print(message_align(f'Copied part {2 if part2 else 1} to clip board!', typical_length))
