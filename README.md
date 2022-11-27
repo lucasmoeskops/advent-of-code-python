@@ -4,13 +4,43 @@ Solutions to Advent of Code problems. The code for the solutions is adjusted aft
 
 ## How to run
 
-Obtain an input file from adventofcode.com for the puzzle you want to run. Assumed is this is called _input.txt_.
+### Setup an env
 
-### Python
+```python3 -m venv venv --prompt="aoc"```
 
-Python version 3.10.0 is required.
+### Add your session cookie value to the .env file:
 
-```shell python3 path/to/file.py < path/to/input.txt```
+E.g.
+
+```SESSION=123f1231a2312b3121e3123d12f```
+
+### Add scripts to execute
+
+Scripts go in `src/y<year>/<%2day>. Name.py`, e.g. `src/y2017/01. Inverse Captcha.py`.
+
+### Run script
+
+#### Default
+
+To run day 1 of 2017:
+
+```./scripts/run.py 1 2017```
+
+### Interactive
+
+To run day 1 of 2017 and give input in the command line:
+
+```./scripts/run.py 1 2017 -i```
+
+Paste or type input and press <enter>, then <Ctrl> + d.
+
+### Showing all printed output instead of trying to parse part1 and part2 outputs:
+
+```./scripts/run.py 1 2017 -d```
+
+### Submitting answer to Advent of Code
+
+```./scripts/run.py 1 2017 -s```
 
 ### Haskell
 
