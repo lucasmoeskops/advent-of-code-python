@@ -7,22 +7,16 @@ AoC Day 2 - Dive! - in Python.
 __author__ = "Lucas Moeskops"
 __date__ = "2021-12-02"
 
-from operator import itemgetter
 from sys import stdin
 
-from helpers import timed, parse_from_re
 
-lines = stdin.read().split('\n')
+LINES = stdin.read().split('\n')
 
-parser_re = r'(?P<direction>\w+) (?P<amount>\d+)'
-parser_map = {'amount': int}
-parsed = list(parse_from_re(parser_re, parser_map, lines))
+commands = [(line.split(' ')[0], int(line.split(' ')[1])) for line in LINES]
 
 
-@timed
-def task_1():
+def part_1():
     position, depth = 0, 0
-    commands = map(itemgetter('direction', 'amount'), parsed)
     for direction, amount in commands:
         match direction:
             case 'forward':
@@ -34,10 +28,8 @@ def task_1():
     return position * depth
 
 
-@timed
-def task_2():
+def part_2():
     aim, position, depth = 0, 0, 0
-    commands = map(itemgetter('direction', 'amount'), parsed)
     for direction, amount in commands:
         match direction:
             case 'forward':
@@ -50,5 +42,6 @@ def task_2():
     return position * depth
 
 
-print(f'1: {task_1()}')
-print(f'2: {task_2()}')
+print(part_1())
+print(part_2())
+

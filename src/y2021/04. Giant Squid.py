@@ -7,13 +7,10 @@ AoC Day 4 - Giant Squid - in Python.
 __author__ = "Lucas Moeskops"
 __date__ = "2021-12-05"
 
+
 from collections import Counter
-from dataclasses import dataclass
-from itertools import islice, chain, cycle, repeat, count
-
+from itertools import islice
 from sys import stdin
-
-from helpers import timed
 
 
 class Board:
@@ -58,8 +55,7 @@ boards_data = [
 ]
 
 
-@timed
-def task_1():
+def part_1():
     boards = [Board(board_data) for board_data in boards_data]
 
     for value in picking_order:
@@ -68,8 +64,7 @@ def task_1():
                 return board.score()
 
 
-@timed
-def task_2():
+def part_2():
     boards = {n: Board(data) for n, data in enumerate(boards_data)}
 
     for value in picking_order:
@@ -80,5 +75,5 @@ def task_2():
                     return board.score()
 
 
-print(f'[Part 1]: {task_1()}')
-print(f'[Part 2]: {task_2()}')
+print(part_1())
+print(part_2())

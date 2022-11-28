@@ -11,14 +11,12 @@ __date__ = "2021-12-06"
 from collections import Counter, deque
 from sys import stdin
 
-from helpers import timed
 
-
-initial = [int(v) for v in stdin.read().split(',')]
+INITIAL = [int(v) for v in stdin.read().split(',')]
 
 
 def find_population(num_days):
-    counter = Counter(initial)
+    counter = Counter(INITIAL)
     per_day = deque([counter[i] for i in range(9)])
     for i in range(num_days):
         at_zero = per_day.popleft()
@@ -27,15 +25,13 @@ def find_population(num_days):
     return sum(per_day)
 
 
-@timed
-def task_1():
+def part_1():
     return find_population(80)
 
 
-@timed
-def task_2():
+def part_2():
     return find_population(256)
 
 
-print(f'[Part 1]: {task_1()}')
-print(f'[Part 2]: {task_2()}')
+print(part_1())
+print(part_2())
