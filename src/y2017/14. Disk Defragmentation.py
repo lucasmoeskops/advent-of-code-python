@@ -1,7 +1,5 @@
-from collections import deque, Counter
+from collections import deque
 from functools import reduce
-from itertools import count
-from operator import itemgetter
 from sys import stdin
 
 

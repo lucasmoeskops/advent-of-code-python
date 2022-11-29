@@ -23,7 +23,7 @@ def message_align(message, length, align_character='-', spacing=1, side_characte
 flags = [y for x in argv if x.startswith('-') for y in x[1:]]
 rest = [x for x in argv if not x.startswith('-')]
 
-year = int(rest[2]) % 100 if len(argv) > 2 else date.today().year % 100
+year = int(rest[1]) % 100 if len(argv) > 1 else date.today().year % 100
 year += 2000
 
 folder_location = path.normpath(path.join(__file__, '..', '..', 'src', f'y{year}'))
@@ -31,8 +31,11 @@ if not path.exists(folder_location):
     os.makedirs(folder_location)
 
 files_created = 0
+already_existing = {name.split('.')[0] for name in listdir(folder_location) if name.endswith('.py')}
 
 for day in range(1, 26):
+    if str(day).zfill(2) in already_existing:
+        continue
     script_location = path.join(folder_location, f'{0 if day < 10 else ""}{day}. XXX.py')
     if not path.exists(script_location):
         open(script_location, 'w').write('from sys import stdin\n\nDATA = stdin.read()\n\n')

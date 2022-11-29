@@ -1,7 +1,3 @@
-from collections import deque, Counter
-from functools import reduce
-from itertools import count
-from operator import itemgetter
 from sys import stdin
 
 
@@ -11,11 +7,10 @@ START_A, START_B = [int(''.join(c for c in description if '0' <= c <= '9')) for 
 
 def make_generator(start_value, multiplier, is_multiple_of=1):
     value = start_value
+    value = (value * multiplier) % 2147483647
     while True:
-        value *= multiplier
-        value %= 2147483647
-        if value % is_multiple_of:
-            continue
+        while value % is_multiple_of:
+            value = (value * multiplier) % 2147483647
         yield value
 
 
