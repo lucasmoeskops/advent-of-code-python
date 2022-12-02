@@ -22,6 +22,8 @@ def adjectivized_number(number):
 def human_time(amount):
     if amount < 0.001:
         return f'{int(amount * 1000000)} microseconds!'
+    if amount < 0.01:
+        return f'{int(amount * 10000)/10.0} milliseconds!'
     if amount < 1:
         return f'{int(amount * 1000)} milliseconds!'
     if amount < 10:
@@ -109,5 +111,5 @@ for day in range(1, 26):
 print(message_align('', sum(widths)+2*len(widths), align_character='-', spacing=0))
 total_message = message_align(f'Total runtime:', widths[0] + widths[1], align_character=' ', spacing=0, align=-1)
 runtime_message = message_align(human_time(total_runtime), widths[2], align_character=' ', spacing=0, align=1)
-print(message_align(total_message + runtime_message, sum(widths)+2*len(widths), align_character=' ', side_character='|'))
+print(message_align(total_message + ' ' + runtime_message, sum(widths)+2*len(widths), align_character=' ', side_character='|', spacing=0))
 print(message_align('', sum(widths)+2*len(widths), align_character='=', spacing=0))

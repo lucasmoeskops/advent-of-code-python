@@ -1,4 +1,8 @@
-.DS_Store
-venv
-.env
-data/**/*.txt
+*
+!*/
+!**/*.py
+!**/*.hs
+!.env.example
+!.python-version
+!README.md
+!.gitignore

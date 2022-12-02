@@ -33,12 +33,24 @@ if not path.exists(folder_location):
 files_created = 0
 already_existing = {name.split('.')[0] for name in listdir(folder_location) if name.endswith('.py')}
 
+TEMPLATE = """
+from sys import stdin
+
+DATA = stdin.read().split('\n')
+
+# ns = [int(x) for x in DATA]
+# xs = [''.join(c for c in x if '0' <= c <= '9' or c == ' ') for x in DATA]
+# xs = [list(map(int, x.split(' ')) for x in xs]
+# cs = {(int(line.split(',')[0]), int(line.split(',')[1])): line.split(':')[1] for line in DATA]
+
+"""
+
 for day in range(1, 26):
     if str(day).zfill(2) in already_existing:
         continue
     script_location = path.join(folder_location, f'{0 if day < 10 else ""}{day}. XXX.py')
     if not path.exists(script_location):
-        open(script_location, 'w').write('from sys import stdin\n\nDATA = stdin.read()\n\n')
+        open(script_location, 'w').write(TEMPLATE.lstrip())
         files_created += 1
 
 
