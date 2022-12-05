@@ -1,5 +1,4 @@
 import Data.List (transpose)
-import Data.Maybe (fromJust)
 import Data.Text (Text, pack, splitOn, strip, unpack)
 
 
@@ -15,13 +14,14 @@ useCrateMover version stacks [] = map head stacks
 useCrateMover version stacks ((amount, from, to):ms) = useCrateMover version (move [] 1 stacks) ms
     where
         move :: CrateSetup -> Int -> CrateSetup -> CrateSetup
-        move ss n [] = reverse ss
-        move ss n ts =
+        move newStacks n [] = reverse newStacks
+        move newStacks n oldStacks =
             let action | n == from = drop amount
                        | n == to   = ((adjust . take amount . (!!(from - 1)) $ stacks)++)
                        | otherwise = id
-            in move ((action . head $ ts):ss) (n+1) (drop 1 ts)
+            in move ((action . head $ oldStacks):newStacks) (n+1) (drop 1 oldStacks)
 
+        adjust :: [a] -> [a]
         adjust = if version == V9000 then reverse else id
 
 
