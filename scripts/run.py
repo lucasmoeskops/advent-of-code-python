@@ -41,8 +41,8 @@ def message_align(message, length, align_character='-', spacing=1, side_characte
 flags = [y for x in argv if x.startswith('-') for y in x[1:]]
 rest = [x for x in argv if not x.startswith('-')]
 
-day = int(rest[1]) if len(argv) > 1 else date.today().day
-year = int(rest[2]) % 100 if len(argv) > 2 else date.today().year % 100
+day = int(rest[1]) if len(rest) > 1 else date.today().day
+year = int(rest[2]) % 100 if len(rest) > 2 else date.today().year % 100
 year += 2000
 
 direct = 'd' in flags

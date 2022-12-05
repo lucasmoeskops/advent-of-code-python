@@ -16,8 +16,8 @@ if not env_data.get('SESSION'):
 flags = [x[1:] for x in argv if x.startswith('-')]
 rest = [x for x in argv if not x.startswith('-')]
 
-day = int(rest[1]) if len(argv) > 1 else date.today().day
-year = int(rest[2]) % 100 if len(argv) > 2 else date.today().year % 100
+day = int(rest[1]) if len(rest) > 1 else date.today().day
+year = int(rest[2]) % 100 if len(rest) > 2 else date.today().year % 100
 year += 2000
 
 data_location = path.normpath(path.join(__file__, '..', '..', 'data', f'y{year}', f'{str(day).zfill(2)}.txt'))

@@ -1,17 +1,9 @@
 #!/usr/bin/env python
 import os
 
-import requests
-import subprocess
-import webbrowser
 from datetime import date
-from io import StringIO
-from importlib.util import spec_from_file_location, module_from_spec
 from os import listdir, path
-import sys
-from shutil import which
-from sys import argv, stdin
-from time import time
+from sys import argv
 
 
 def message_align(message, length, align_character='-', spacing=1, side_character=''):
@@ -23,7 +15,7 @@ def message_align(message, length, align_character='-', spacing=1, side_characte
 flags = [y for x in argv if x.startswith('-') for y in x[1:]]
 rest = [x for x in argv if not x.startswith('-')]
 
-year = int(rest[1]) % 100 if len(argv) > 1 else date.today().year % 100
+year = int(rest[1]) % 100 if len(rest) > 1 else date.today().year % 100
 year += 2000
 
 folder_location = path.normpath(path.join(__file__, '..', '..', 'src', f'y{year}'))
@@ -42,6 +34,7 @@ DATA = stdin.read().split('\n')
 # xs = [''.join(c for c in x if '0' <= c <= '9' or c == ' ') for x in DATA]
 # xs = [list(map(int, x.split(' ')) for x in xs]
 # cs = {(int(line.split(',')[0]), int(line.split(',')[1])): line.split(':')[1] for line in DATA]
+# ns = [tuple(map(int, pair.replace('-', ',').split(','))) for pair in PAIRS]
 
 """
 

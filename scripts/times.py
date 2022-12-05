@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-import subprocess
 from datetime import date
 from io import StringIO
 from importlib.util import spec_from_file_location, module_from_spec
@@ -47,7 +46,7 @@ def message_align(message, length, align_character='-', spacing=1, side_characte
 flags = [x[1:] for x in argv if x.startswith('-')]
 rest = [x for x in argv if not x.startswith('-')]
 
-year = int(rest[1]) % 100 if len(argv) > 1 else date.today().year % 100
+year = int(rest[1]) % 100 if len(rest) > 1 else date.today().year % 100
 year += 2000
 
 error = module = script_name = script_path = ''

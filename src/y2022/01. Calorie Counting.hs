@@ -1,9 +1,9 @@
 import Data.List (sort)
-import Data.Text (pack, splitOn, unpack)
+import Data.Text (pack, splitOn, strip, unpack)
 
-normalize = reverse . sort . map normalizeElf . splitOn (pack "\n\n") . pack
+normalize = reverse . sort . map normalizeElf . splitOn (pack "\n\n") . strip . pack
 
-normalizeElf = sum . map read . filter (/= "") . map unpack . splitOn (pack "\n")
+normalizeElf = sum . map read . map unpack . splitOn (pack "\n")
 
 main = do
     elfSums <- normalize <$> getContents

@@ -1,6 +1,6 @@
 import Data.List (elemIndex)
 import Data.Maybe (fromJust)
-import Data.Text (pack, splitOn, unpack)
+import Data.Text (pack, splitOn, strip, unpack)
 
 part1 = sum.map roundScore
     where
@@ -14,7 +14,7 @@ part2 = sum.map roundScore
         playChoice (opponent, me) = (opponent + me + 2) `mod` 3 + 1
         roundScore round@(opponent, me) = resultScore me + playChoice round
 
-normalize = map normalizeRound . filter (/="") . map unpack . splitOn (pack "\n") . pack
+normalize = map normalizeRound . map unpack . splitOn (pack "\n") . strip . pack
 
 normalizeRound round =
     let indexAt i = fromJust . elemIndex (round!!i)
