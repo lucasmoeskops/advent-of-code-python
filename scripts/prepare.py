@@ -28,7 +28,7 @@ already_existing = {name.split('.')[0] for name in listdir(folder_location) if n
 TEMPLATE = """
 from sys import stdin
 
-DATA = stdin.read().split('\n')
+DATA = stdin.read().split('\\n')
 
 # ns = [int(x) for x in DATA]
 # xs = [''.join(c for c in x if '0' <= c <= '9' or c == ' ') for x in DATA]

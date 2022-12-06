@@ -15,15 +15,15 @@ type CrateSetup = [Text]
 
 useCrateMover :: Version -> CrateSetup -> [Command] -> Text
 useCrateMover version stacks [] = T.pack . map T.head $ stacks
-useCrateMover version stacks ((amount, from, to):ms) = useCrateMover version (move [] 1 stacks) ms
+useCrateMover version stacks ((amount, from, to):ms) = useCrateMover version (move [] (length stacks)) ms
     where
-        move :: CrateSetup -> Int -> CrateSetup -> CrateSetup
-        move newStacks n [] = reverse newStacks
-        move newStacks n oldStacks =
+        move :: CrateSetup -> Int -> CrateSetup
+        move newStacks 0 = newStacks
+        move newStacks n =
             let action | n == from = T.drop amount
                        | n == to   = T.append . adjust . T.take amount . (!!(from - 1)) $ stacks
                        | otherwise = id
-            in move ((action . head $ oldStacks):newStacks) (n+1) (drop 1 oldStacks)
+            in move ((action . (!!(n-1)) $ stacks):newStacks) (n-1)
 
         adjust :: Text -> Text
         adjust = if version == V9000 then T.reverse else id

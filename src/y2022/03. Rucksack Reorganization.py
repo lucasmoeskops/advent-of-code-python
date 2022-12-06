@@ -12,22 +12,20 @@ def priority(item):
 def items_in_both_compartments():
     for rucksack in RUCKSACKS:
         half = len(rucksack) // 2
-        half_1_unique = set(rucksack[half:])
-        half_2 = rucksack[:half]
+        half_1, half_2 = rucksack[:half], rucksack[half:]
 
-        for item in half_1_unique:
+        for item in half_1:
             if item in half_2:
                 yield item
+                break
 
 
 def badges():
-    for i in range(0, len(RUCKSACKS), 3):
-        rucksack_1_unique = set(RUCKSACKS[i])
-        rucksack_2, rucksack_3 = RUCKSACKS[i + 1], RUCKSACKS[i + 2]
-
-        for item in rucksack_1_unique:
-            if item in rucksack_2 and item in rucksack_3:
+    for rucksack_a, rucksack_b, rucksack_c in zip(RUCKSACKS[::3], RUCKSACKS[1::3], RUCKSACKS[2::3]):
+        for item in rucksack_a:
+            if item in rucksack_b and item in rucksack_c:
                 yield item
+                break
 
 
 print(sum(map(priority, items_in_both_compartments())))
