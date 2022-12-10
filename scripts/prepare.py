@@ -35,6 +35,7 @@ DATA = stdin.read().split('\\n')
 # xs = [list(map(int, x.split(' ')) for x in xs]
 # cs = {(int(line.split(',')[0]), int(line.split(',')[1])): line.split(':')[1] for line in DATA]
 # ns = [tuple(map(int, pair.replace('-', ',').split(','))) for pair in PAIRS]
+# ps = [tuple(map(int, findall(r'(-?\d+)', line))) for line in DATA]
 
 """
 

@@ -88,7 +88,7 @@ while data.startswith('\n'):
 while data.endswith('\n'):
     data = data[:-1]
 
-first_message = f'=== Advent of Code december {adjectivized_number(day)} {year} ==='
+first_message = f'===== Advent of Code december {adjectivized_number(day)} {year} ====='
 title = script_name[4:-3]
 typical_length = len(first_message)
 print(first_message)
