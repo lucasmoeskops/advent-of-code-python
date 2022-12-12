@@ -5,11 +5,12 @@ DATA = stdin.read()
 
 
 def shortest(start, end, descend=False):
-    queue = deque([(start, 0, ord('a' if DATA[start] == 'S' else 'z'))])
+    queue = deque([(start, 0)])
     seen = {start}
 
     while queue:
-        index, steps, elevation = queue.popleft()
+        index, steps = queue.popleft()
+        elevation = ord(DATA[index] if steps else 'a' if DATA[index] == 'S' else 'z')
 
         for di in (width, 1, -width, -1):
             p = index + di
@@ -21,14 +22,14 @@ def shortest(start, end, descend=False):
                 target_elevation = ord(DATA[p] if DATA[p] != 'E' else 'z')
 
                 if (elevation - target_elevation if descend else target_elevation - elevation) < 2:
-                    if end and p == end or (descend and DATA[p] == 'a'):
+                    if end and p == end or descend and DATA[p] == 'a':
                         return steps + 1
 
                     seen.add(p)
-                    queue.append((p, steps + 1, target_elevation))
+                    queue.append((p, steps + 1))
 
 
-width = (DATA.index('\n') + 1)
+width = DATA.index('\n') + 1
 start, end = map(DATA.index, "SE")
 
 print(shortest(start, end))
