@@ -1,5 +1,5 @@
 from enum import Enum
-from itertools import pairwise
+from itertools import pairwise, starmap
 
 from sys import stdin
 
@@ -13,15 +13,7 @@ class Direction(Enum):
     L = -1, 0
 
 
-def update_positions():
-    for i, (a, b) in enumerate(pairwise(positions)):
-        positions[i+1] = update_tail(a, b)
-
-
 def update_tail(head, tail):
-    if head == tail:
-        return tail
-
     hx, hy = head
     tx, ty = tail
 
@@ -32,6 +24,7 @@ def update_tail(head, tail):
         tx += 1
     elif hx < tx:
         tx -= 1
+
     if hy > ty:
         ty += 1
     elif hy < ty:
@@ -50,12 +43,11 @@ for line in DATA.split('\n'):
     dx, dy = Direction[direction].value
 
     for i in range(int(amount)):
-        update_positions()
+        positions[1:] = starmap(update_tail, pairwise(positions))
         visited2.add(positions[1])
         visited10.add(positions[-1])
         x += dx
         y += dy
         positions[0] = x, y
 
-print(len(visited2))
-print(len(visited10))
+print('\n'.join(map(str, map(len, (visited2, visited10)))))
