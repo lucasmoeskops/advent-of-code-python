@@ -20,17 +20,10 @@ def update_tail(head, tail):
     if abs(hx-tx) <= 1 and abs(hy-ty) <= 1:
         return tail
 
-    if hx > tx:
-        tx += 1
-    elif hx < tx:
-        tx -= 1
-
-    if hy > ty:
-        ty += 1
-    elif hy < ty:
-        ty -= 1
-
-    return tx, ty
+    return (
+        tx + (hx > tx) - (hx < tx),
+        ty + (hy > ty) - (hy < ty),
+    )
 
 
 positions = [(0, 0)] * 10
@@ -46,8 +39,6 @@ for line in DATA.split('\n'):
         positions[1:] = starmap(update_tail, pairwise(positions))
         visited2.add(positions[1])
         visited10.add(positions[-1])
-        x += dx
-        y += dy
-        positions[0] = x, y
+        positions[0] = x, y = x + dx, y + dy
 
 print('\n'.join(map(str, map(len, (visited2, visited10)))))
