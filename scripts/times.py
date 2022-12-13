@@ -1,11 +1,19 @@
 #!/usr/bin/env python
+import re
 from datetime import date
 from io import StringIO
 from importlib.util import spec_from_file_location, module_from_spec
+from math import log
 from os import listdir, path
 import sys
 from sys import argv
 from time import time
+
+
+try:
+    import xtermcolor
+except ModuleNotFoundError:
+    xtermcolor = None
 
 
 def adjectivized_number(number):
@@ -16,6 +24,17 @@ def adjectivized_number(number):
     elif number == 3:
         return '3rd'
     return f'{number}th'
+
+
+def benchmark_colorize(benchmark, amount, s):
+    if xtermcolor is None:
+        return s
+    amount *= 1000000
+
+    red_ness = int((log(max(benchmark, amount * 2)) / log(benchmark) - 0.5) * 0xFF) if amount > benchmark / 2 else 0
+    green_ness = max(0, min(0xFF, int((0.5 + (1 - log(amount) / log(benchmark)) * .5) * 0xFF if amount < benchmark else (1 - log(amount) / log(benchmark)) * 0x44)))
+
+    return xtermcolor.colorize(s, rgb=red_ness*0x10000+green_ness*0x100)
 
 
 def human_time(amount):
@@ -31,6 +50,10 @@ def human_time(amount):
 
 
 def message_align(message, length, align_character='-', spacing=1, side_character='', max_length=None, align=0):
+    if xtermcolor is not None:
+        real_message, message = message, re.sub(r'\x1b\[\d+(;\d+)*m', '', message)
+    else:
+        real_message = message
     if max_length and len(message) + len(side_character) * 2 + spacing * 2 > max_length:
         message = message[:max_length-spacing*2-len(side_character)*2-3] + '...'
     remaining = max(0, length - spacing * 2 - len(side_character) * 2 - len(message))
@@ -40,7 +63,7 @@ def message_align(message, length, align_character='-', spacing=1, side_characte
         left, right = remaining, 0
     else:
         left, right = remaining // 2 + remaining % 2, remaining // 2
-    return f'{side_character}{align_character * left}{" "*spacing}{message}{" "*spacing}{align_character * right}{side_character}'
+    return f'{side_character}{align_character * left}{" "*spacing}{real_message}{" "*spacing}{align_character * right}{side_character}'
 
 
 flags = [x[1:] for x in argv if x.startswith('-')]
@@ -56,6 +79,10 @@ widths = 6, 40, 20
 first_message = f'Advent of Code {year} runtimes'
 print(message_align(first_message, sum(widths)+2*len(widths), align_character='='))
 total_runtime = 0
+
+benchmark = 1
+num_puzzles = 25
+per_puzzle = benchmark * 1000000 // num_puzzles
 
 for day in range(1, 26):
     if date(year, 12, day) > date.today():
@@ -101,7 +128,8 @@ for day in range(1, 26):
     end = time()
     sys.stdin = sys.__stdin__
 
-    runtime_message = message_align(' ' + human_time(end-start), widths[2], align_character=' ', max_length=widths[2], align=1, spacing=0)
+    runtime_message = benchmark_colorize(per_puzzle, end-start, human_time(end-start))
+    runtime_message = message_align(' ' + runtime_message, widths[2], align_character=' ', max_length=widths[2], align=1, spacing=0)
     print(message_align(day_message + title_message + runtime_message, sum(widths), align_character=' ',
                         side_character='|'))
 
@@ -109,6 +137,7 @@ for day in range(1, 26):
 
 print(message_align('', sum(widths)+2*len(widths), align_character='-', spacing=0))
 total_message = message_align(f'Total runtime:', widths[0] + widths[1], align_character=' ', spacing=0, align=-1)
-runtime_message = message_align(human_time(total_runtime), widths[2], align_character=' ', spacing=0, align=1)
+runtime_message = benchmark_colorize(1000000, total_runtime, human_time(total_runtime))
+runtime_message = message_align(runtime_message, widths[2], align_character=' ', spacing=0, align=1)
 print(message_align(total_message + ' ' + runtime_message, sum(widths)+2*len(widths), align_character=' ', side_character='|', spacing=0))
 print(message_align('', sum(widths)+2*len(widths), align_character='=', spacing=0))

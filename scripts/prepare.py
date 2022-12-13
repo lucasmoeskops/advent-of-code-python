@@ -40,7 +40,7 @@ DATA = stdin.read().split('\\n')
 #     lambda: 'X',
 #     [
 #         ((x, y), val)
-#         for y, row in enumerate(DATA.split('\n'))
+#         for y, row in enumerate(DATA.split('\\n'))
 #         for x, val in enumerate(row)
 #     ]
 # )
