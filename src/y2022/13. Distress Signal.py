@@ -31,11 +31,9 @@ def parse(line):
             else:
                 stack.append(int(c))
         elif c == ',':
-            x = stack.pop()
-            stack[-1].append(x)
+            stack[-2].append(stack.pop())
         elif c == ']' and skip_close != i:
-            x = stack.pop()
-            stack[-1].append(x)
+            stack[-2].append(stack.pop())
         elif c == '[':
             stack.append([])
             skip_close = i + 1

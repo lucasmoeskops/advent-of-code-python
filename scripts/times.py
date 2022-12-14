@@ -31,10 +31,11 @@ def benchmark_colorize(benchmark, amount, s):
         return s
     amount *= 1000000
 
-    red_ness = int((log(max(benchmark, amount * 2)) / log(benchmark) - 0.5) * 0xFF) if amount > benchmark / 2 else 0
-    green_ness = max(0, min(0xFF, int((0.5 + (1 - log(amount) / log(benchmark)) * .5) * 0xFF if amount < benchmark else (1 - log(amount) / log(benchmark)) * 0x44)))
+    red_ness = 0xFF if amount > benchmark else 0
+    green_ness = max(0, min(0xFF, int((0.5 + (1 - log(amount) / log(benchmark)) * .5) * 0xFF if amount < benchmark else int(0xFF - min(0xFF, 0xFF * amount / 25 / benchmark)))))
+    blue_ness = int(max(0, 1000 - min(1000, amount)) * 0xFF // 400)
 
-    return xtermcolor.colorize(s, rgb=red_ness*0x10000+green_ness*0x100)
+    return xtermcolor.colorize(s, rgb=red_ness*0x10000+green_ness*0x100+blue_ness)
 
 
 def human_time(amount):
@@ -141,3 +142,12 @@ runtime_message = benchmark_colorize(1000000, total_runtime, human_time(total_ru
 runtime_message = message_align(runtime_message, widths[2], align_character=' ', spacing=0, align=1)
 print(message_align(total_message + ' ' + runtime_message, sum(widths)+2*len(widths), align_character=' ', side_character='|', spacing=0))
 print(message_align('', sum(widths)+2*len(widths), align_character='=', spacing=0))
+#
+#
+# def yy():
+#     x = 100.0
+#     for i in range(20):
+#         yield x
+#         x /= 3
+#
+# print(''.join(benchmark_colorize(40000, x, i) for i, x in enumerate(yy())))
