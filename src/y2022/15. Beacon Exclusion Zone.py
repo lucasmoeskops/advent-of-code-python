@@ -36,7 +36,7 @@ for y in range(SPACE):
             x = sensor_x + x_size + 1
 
     if x <= SPACE:
-        print(x * SPACE + y, a)
+        print(x * SPACE + y)
         break
 
 
