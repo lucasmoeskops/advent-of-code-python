@@ -31,23 +31,28 @@ while queue:
 
 print(max(best_at.values()))
 
-queue = deque([('AA', 'AA', 0, 0, 0, ())])
+queue = deque([('AAAA', 0, 0, 0, ())])
 best_at = defaultdict(lambda: -1)
 
 while queue:
-    you_at, elephant_at, minute, rate, pressure, open = queue.popleft()
+    pos, minute, rate, pressure, open = queue.popleft()
 
-    if best_at[(you_at, you_at in open, elephant_at, elephant_at in open)] >= pressure:
+    key = (pos, pos[:2] in open, pos[2:] in open)
+
+    if best_at[key] >= pressure:
         continue
 
-    best_at[(you_at, you_at in open, elephant_at, elephant_at in open)] = pressure
+    best_at[key] = pressure
 
     if minute < 26:
+        you_at = pos[:2]
+        elephant_at = pos[2:]
+        you_open = you_at not in open and pressures[you_at]
+        elephant_open = elephant_at != you_at and elephant_at not in open and pressures[elephant_at]
         # You and elephant both open valve
-        if you_at not in open and elephant_at not in open and pressures[you_at] and pressures[elephant_at]:
+        if you_open and elephant_open:
             queue.append((
-                you_at,
-                elephant_at,
+                min(you_at, elephant_at) + max(you_at, elephant_at),
                 minute+1,
                 rate + pressures[you_at] + pressures[elephant_at],
                 pressure + rate,
@@ -55,11 +60,10 @@ while queue:
             ))
 
         # You open valve and elephant moves
-        if you_at not in open and pressures[you_at]:
+        if you_open:
             for option in map_[elephant_at]:
                 queue.append((
-                    you_at,
-                    option,
+                    min(you_at, option) + max(you_at, option),
                     minute + 1,
                     rate + pressures[you_at],
                     pressure + rate,
@@ -67,11 +71,10 @@ while queue:
                 ))
 
         # You move and elephant opens valve
-        if elephant_at not in open and pressures[elephant_at]:
+        if elephant_open:
             for option in map_[you_at]:
                 queue.append((
-                    option,
-                    elephant_at,
+                    min(option, elephant_at) + max(option, elephant_at),
                     minute + 1,
                     rate + pressures[elephant_at],
                     pressure + rate,
@@ -79,8 +82,10 @@ while queue:
                 ))
 
         # Both move
+        # Not fully sure if it is valid to say "Never move if you can open a valve with pressure"
+        # if not you_open and not elephant_open:
         for option_you in map_[you_at]:
             for option_elephant in map_[elephant_at]:
-                queue.append((option_you, option_elephant, minute + 1, rate, pressure + rate, open))
+                queue.append((min(option_you, option_elephant) + max(option_you, option_elephant), minute + 1, rate, pressure + rate, open))
 
 print(max(best_at.values()))
