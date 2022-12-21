@@ -6,8 +6,17 @@ from sys import stdin
 DATA = stdin.read().split('\n')
 
 
-def reverse_op(monkey, target, known_is_right):
-    operation = monkeys[monkey]
+def op(operation, lhs, rhs):
+    if '*' in operation:
+        return lhs * rhs
+    if '/' in operation:
+        return lhs // rhs
+    if '+' in operation:
+        return lhs + rhs
+    return lhs - rhs
+
+
+def reverse_op(operation, target, known_is_right):
     if '*' in operation:
         return lambda x: target // x
     if '/' in operation:
@@ -42,7 +51,7 @@ def solve(monkey_deps):
                 if monkey_vals[dep] is None:
                     break
             else:
-                monkey_vals[monkey] = int(eval(sub(r'([a-z]{4})', lambda g: str(monkey_vals[g[0]]), monkeys[monkey])))
+                monkey_vals[monkey] = op(monkeys[monkey], *map(monkey_vals.__getitem__, monkey_deps[monkey]))
                 del monkey_deps[monkey]
                 change = True
 
@@ -81,6 +90,6 @@ while queue:
         if monkey_vals[rhs] is None:
             print('I don\'t know how to fix yet!')
         else:
-            queue.append((lhs, reverse_op(item, target, True)(monkey_vals[rhs])))
+            queue.append((lhs, reverse_op(monkeys[item], target, True)(monkey_vals[rhs])))
     else:
-        queue.append((rhs, reverse_op(item, target, False)(monkey_vals[lhs])))
+        queue.append((rhs, reverse_op(monkeys[item], target, False)(monkey_vals[lhs])))
