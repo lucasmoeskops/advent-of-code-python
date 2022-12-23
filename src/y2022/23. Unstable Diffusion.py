@@ -5,14 +5,8 @@ from sys import stdin
 
 DATA = stdin.read()
 
-N = 0
-NE = 1
-E = 2
-SE = 3
-S = 4
-SW = 5
-W = 6
-NW = 7
+N, NE, E, SE, S, SW, W, NW = range(8)
+CONSIDER_ORDER = N, S, W, E
 
 DIRECTIONS = {
     N: (0, -1),
@@ -25,54 +19,46 @@ DIRECTIONS = {
     NW: (-1, -1),
 }
 
-CONSIDER_ORDER = (N, S, W, E)
 
-
-def make_cycle(items, start):
-    return islice(cycle(items), start, start + len(items))
-
-
-def round(positions, considering_first):
+def round(positions, considerings):
     considered_moves = defaultdict(list)
-    has_move = set()
+    considerors = set()
 
     for x, y in positions:
         for dx, dy in DIRECTIONS.values():
             if (x + dx, y + dy) in positions:
+                considerors.add((x, y))
                 break
-        else:
-            has_move.add((x, y))
 
-    if len(has_move) == len(positions):
+    if not considerors:
         return True
 
-    for direction in make_cycle(CONSIDER_ORDER, considering_first):
-        d = DIRECTIONS[(direction - 1) % 8]
-        e = DIRECTIONS[direction]
-        f = DIRECTIONS[(direction + 1) % 8]
+    for direction in islice(considerings, 4):
+        check = tuple(map(
+            DIRECTIONS.__getitem__,
+            islice(cycle(range(8)), direction + 7, direction + 10)
+        ))
 
-        for x, y in positions:
-            if (x, y) in has_move:
-                continue
-
-            for dx, dy in (d, e, f):
+        for x, y in tuple(considerors):
+            for dx, dy in check:
                 if (x + dx, y + dy) in positions:
                     break
             else:
                 # can move
-                considered_moves[(x + e[0], y + e[1])].append((x, y))
-                has_move.add((x, y))
+                considered_moves[(x + check[1][0], y + check[1][1])].append((x, y))
+                considerors.remove((x, y))
 
     for location, elves in considered_moves.items():
         if len(elves) == 1:
             positions.remove(elves[0])
             positions.add(location)
 
+    next(considerings)
     return False
 
 
 def do():
-    considering_first = 0
+    considerings = cycle(CONSIDER_ORDER)
     positions = {
         (x, y)
         for y, row in enumerate(DATA.split('\n'))
@@ -80,11 +66,9 @@ def do():
     }
 
     for number in count(start=1):
-        if round(positions, considering_first):
+        if round(positions, considerings):
             print(number)  # part 2
             break
-
-        considering_first = (considering_first + 1) % 4
 
         if number == 10:
             print(
