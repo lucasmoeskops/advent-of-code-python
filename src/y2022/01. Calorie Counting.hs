@@ -1,9 +1,14 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 import Data.List (sort)
-import Data.Text (pack, splitOn, strip, unpack)
+import Data.Text (Text)
+import qualified Data.Text as T (map, pack, splitOn, strip, unpack)
 
-normalize = reverse . sort . map normalizeElf . splitOn (pack "\n\n") . strip . pack
+normalize :: String -> [Int]
+normalize = reverse . sort . map normalizeElf . T.splitOn "\n\n" . T.strip . T.pack
 
-normalizeElf = sum . map read . map unpack . splitOn (pack "\n")
+normalizeElf :: Text -> Int
+normalizeElf = sum . map (read . T.unpack) . T.splitOn "\n"
 
 main = do
     elfSums <- normalize <$> getContents

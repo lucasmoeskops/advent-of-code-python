@@ -1,4 +1,4 @@
-import os, sys
+import os
 from collections import defaultdict
 from time import sleep
 
@@ -80,7 +80,7 @@ def print_map(maps, blizzards, minute, position):
     return out
 
 
-def do(animate='-a' in sys.argv):
+def do(animate='-a' in argv):
     blizzards = {}
     maps = {}
     at = START
