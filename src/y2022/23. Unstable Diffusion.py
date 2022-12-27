@@ -1,5 +1,5 @@
 from collections import defaultdict
-from itertools import cycle, islice, count
+from itertools import cycle, islice, count, tee
 from math import prod
 from sys import stdin
 
@@ -8,16 +8,9 @@ DATA = stdin.read()
 N, NE, E, SE, S, SW, W, NW = range(8)
 CONSIDER_ORDER = N, S, W, E
 
-DIRECTIONS = {
-    N: (0, -1),
-    NE: (1, -1),
-    E: (1, 0),
-    SE: (1, 1),
-    S: (0, 1),
-    SW: (-1, 1),
-    W: (-1, 0),
-    NW: (-1, -1),
-}
+DIRECTIONS = dict(enumerate(
+    (lambda a, b: zip(a, islice(b, 6, 14)))(*tee(cycle([0, 1, 1, 1, 0, -1, -1, -1])))
+))  # For fun
 
 
 def round(positions, considerings):
