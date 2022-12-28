@@ -14,7 +14,7 @@ contains (a, b) (c, d) = a <= c && b >= d || a >= c && b <= d
 
 
 overlaps :: Range -> Range -> Bool
-overlaps (a, b) (c, d) = a <= d && b >= c || a >= d && b <= c
+overlaps (a, b) (c, d) = a <= d && b >= c
 
 
 part1 :: [Pair] -> String
