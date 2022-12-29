@@ -18,11 +18,13 @@ overlaps (a, b) (c, d) = a <= d && b >= c
 
 
 part1 :: [Pair] -> String
-part1 = show . length . filter (uncurry contains)
+part1 = format . show . length . filter (uncurry contains)
+    where format answer = "One range fully contains the other in " ++ answer ++ " assignment pairs."
 
 
 part2 :: [Pair] -> String
-part2 = show . length . filter (uncurry overlaps)
+part2 = format . show . length . filter (uncurry overlaps)
+    where format answer = "The ranges overlap in " ++ answer ++ " pairs."
 
 
 deserialize :: Text -> [Pair]

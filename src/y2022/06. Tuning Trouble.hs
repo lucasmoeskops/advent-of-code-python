@@ -21,11 +21,13 @@ findUniqueRange size =
 
 
 part1 :: String -> String
-part1 = show . findUniqueRange 4
+part1 = format . show . findUniqueRange 4
+    where format answer = answer ++ " Characters need to be processed before the first start-of-packet marker is detected."
 
 
 part2 :: String -> String
-part2 = show . findUniqueRange 14
+part2 = format . show . findUniqueRange 14
+    where format answer = answer ++ " Characters need to be processed before the first start-of-message marker is detected."
 
 
 present = do putStrLn . foldr1 (\a b -> a ++ '\n':b)
