@@ -7,7 +7,7 @@ from sys import argv
 URL = "https://adventofcode.com/{year}/day/{day}/input"
 
 env_file_location = path.normpath(path.join(__file__, '..', '..', '.env'))
-env_data = {line.split('=')[0]: line.split('=')[1] for line in open(env_file_location, 'r').readlines() if not line.startswith('#')}
+env_data = {line.split('=')[0]: line.split('=')[1].strip() for line in open(env_file_location, 'r').readlines() if not line.startswith('#')}
 
 if not env_data.get('SESSION'):
     print('Mising session in .env file!')
