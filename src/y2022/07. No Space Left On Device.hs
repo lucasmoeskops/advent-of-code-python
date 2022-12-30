@@ -10,6 +10,7 @@ import qualified Data.Text as T (append, pack, splitOn, strip, unpack)
 data DirectoryTree = DirectoryTree String [DirectoryTree] [File]
 data File = File String Int deriving (Show)
 
+
 instance Show DirectoryTree where
     show (DirectoryTree name ds fs) =
         let items = map show ds ++ map showFile fs
@@ -25,6 +26,20 @@ instance Show DirectoryTree where
 
             showFile :: File -> String
             showFile (File name size) = name ++ " (" ++ show size ++ ")"
+
+
+-- FIXME: Quite inefficient as all subdirectories are computed again instead of stored in lookup table
+part1 :: DirectoryTree -> String
+part1 =
+    let format answer = "The sum of the total sizes of those directories is " ++ answer ++ "."
+    in format . show . sum . filter (<=100000) . map size . walk
+
+
+part2 :: DirectoryTree -> String
+part2 dt =
+    let spaceToFree = size dt - 70000000 + 30000000
+        format answer = "The total size of that directory is " ++ answer ++ "."
+    in format . show . minimum . filter (>=spaceToFree) . map size . walk $ dt
 
 
 readDiskStructure :: [String] -> DirectoryTree
@@ -64,19 +79,6 @@ walk dt@(DirectoryTree name ds fs) = dt:(concat $ map walk ds)
 size :: DirectoryTree -> Int
 size (DirectoryTree name ds fs) = (sum $ map fileSize fs) + (sum $ map size ds)
     where fileSize (File name size) = size
-
-
--- FIXME: Quite inefficient as all subdirectories are computed again instead of stored in lookup table
-part1 :: DirectoryTree -> String
-part1 = format . show . sum . filter (<=100000) . map size . walk
-    where format answer = "The sum of the total sizes of those directories is " ++ answer ++ "."
-
-
-part2 :: DirectoryTree -> String
-part2 dt =
-    let spaceToFree = size dt - 70000000 + 30000000
-    in format . show . minimum . filter (>=spaceToFree) . map size . walk $ dt
-    where format answer = "The total size of that directory is " ++ answer ++ "."
 
 
 present = do putStrLn . foldr1 (\a b -> a ++ '\n':b)

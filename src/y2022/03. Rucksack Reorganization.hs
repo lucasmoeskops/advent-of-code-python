@@ -1,9 +1,26 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-import Control.Applicative (liftA2)
 import Data.Char (ord)
-import Data.List (elemIndex, intercalate, intersperse)
+import Data.List (elemIndex)
+import Data.Text (Text)
+import qualified Data.Text.IO as TIO (getContents)
 import qualified Data.Text as T (pack, splitOn, strip, unpack)
+
+
+part1 :: [String] -> String
+part1 =
+    let format answer = "The sum of the priorities of those item types is " ++ answer ++ "."
+    in format . show . sum . map (priority . item_in_both_compartments)
+
+
+part2 :: [String] -> String
+part2 =
+    let format answer = "The sum of the priorities of those item types is " ++ answer ++ "."
+    in format . show . sum . findBadges
+    where
+        findBadges :: [String] -> [Int]
+        findBadges [] = []
+        findBadges (a:b:c:ds) = (priority $ badge a b c):findBadges ds
 
 
 priority :: Char -> Int
@@ -35,19 +52,13 @@ badge a b c =
     in search a
 
 
-part1 :: [String] -> Int
-part1 = sum . map (priority . item_in_both_compartments)
+deserialize :: Text -> [String]
+deserialize = map T.unpack . T.splitOn "\n" . T.strip
 
 
-part2 :: [String] -> Int
-part2 []         = 0
-part2 (a:b:c:ds) = (priority $ badge a b c) + part2 ds
-
-
-deserialize :: String -> [String]
-deserialize = map T.unpack . T.splitOn "\n" . T.strip . T.pack
+present = do putStrLn . foldr1 (\a b -> a ++ '\n':b)
 
 
 main = do
-    rucksacks <- deserialize <$> getContents
-    putStrLn . intercalate "\n" . map show . (`map` [part1, part2]) . flip ($) $ rucksacks
+    rucksacks <- deserialize <$> TIO.getContents
+    present [part1 rucksacks, part2 rucksacks]

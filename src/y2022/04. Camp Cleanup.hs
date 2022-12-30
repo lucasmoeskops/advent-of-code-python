@@ -9,22 +9,24 @@ type Range = (Int, Int)
 type Pair = (Range, Range)
 
 
+part1 :: [Pair] -> String
+part1 =
+    let format answer = "One range fully contains the other in " ++ answer ++ " assignment pairs."
+    in format . show . length . filter (uncurry contains)
+
+
+part2 :: [Pair] -> String
+part2 =
+    let format answer = "The ranges overlap in " ++ answer ++ " pairs."
+    in format . show . length . filter (uncurry overlaps)
+
+
 contains :: Range -> Range -> Bool
 contains (a, b) (c, d) = a <= c && b >= d || a >= c && b <= d
 
 
 overlaps :: Range -> Range -> Bool
 overlaps (a, b) (c, d) = a <= d && b >= c
-
-
-part1 :: [Pair] -> String
-part1 = format . show . length . filter (uncurry contains)
-    where format answer = "One range fully contains the other in " ++ answer ++ " assignment pairs."
-
-
-part2 :: [Pair] -> String
-part2 = format . show . length . filter (uncurry overlaps)
-    where format answer = "The ranges overlap in " ++ answer ++ " pairs."
 
 
 deserialize :: Text -> [Pair]
@@ -37,6 +39,7 @@ deserialize =
 
 
 present = do putStrLn . foldr1 (\a b -> a ++ '\n':b)
+
 
 main = do
     pairs <- deserialize <$> TIO.getContents
