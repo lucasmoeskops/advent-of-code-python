@@ -19,8 +19,8 @@ part2 =
     in format . show . sum . findBadges
     where
         findBadges :: [String] -> [Int]
-        findBadges [] = []
         findBadges (a:b:c:ds) = (priority $ badge a b c):findBadges ds
+        findBadges rs = []
 
 
 priority :: Char -> Int

@@ -7,13 +7,15 @@ import qualified Data.Text.IO as TIO (getContents)
 import qualified Data.Text as T (append, pack, splitOn, strip, unpack)
 
 
-data DirectoryTree = DirectoryTree String [DirectoryTree] [File]
-data File = File String Int deriving (Show)
+type Name = String
+type Size = Int
+data DirectoryTree = DirectoryTree Name [DirectoryTree] [File]
+data File = File Name Size
 
 
 instance Show DirectoryTree where
     show (DirectoryTree name ds fs) =
-        let items = map show ds ++ map showFile fs
+        let items = map show ds ++ map show fs
         in name ++ "\n" ++ showItems items
         where
             showItem :: Text -> String -> String
@@ -24,8 +26,8 @@ instance Show DirectoryTree where
             showItems (a:b:items) = "├── " ++ showItem "|   " a ++ showItems (b:items)
             showItems (a:items)   = "└── " ++ showItem "    " a
 
-            showFile :: File -> String
-            showFile (File name size) = name ++ " (" ++ show size ++ ")"
+instance Show File where
+    show (File name size) = name ++ " (" ++ show size ++ ")"
 
 
 -- FIXME: Quite inefficient as all subdirectories are computed again instead of stored in lookup table
@@ -50,22 +52,24 @@ readDiskStructure = readDiskStructure' [DirectoryTree "root" [] []]
 
         readDiskStructure' :: [DirectoryTree] -> [String] -> DirectoryTree
         readDiskStructure' (top:parent:root:stack) [] =
-            readDiskStructure' (addDirectory parent top:root:stack) []
-        readDiskStructure' stack [] = last $ init stack
+            readDiskStructure' (addDirectory parent (reverseOrder top) : root : stack) []
+        readDiskStructure' stack [] = reverseOrder . last $ init stack
         readDiskStructure' (top:stack) (line:rest)
             | line == "$ cd .."                         =
-                readDiskStructure' (addDirectory (head stack) top:tail stack) rest
+                readDiskStructure' (addDirectory (head stack) (reverseOrder top) : tail stack) rest
             | startsWith "$ cd " line                   =
-                readDiskStructure' (DirectoryTree (drop 5 line) [] []:top:stack) rest
+                readDiskStructure' (DirectoryTree (drop 5 line) [] [] : top:stack) rest
             | (\x -> '0' <= x && x <= '9') $ head line =
                 let parseFile = (\(size, name) -> File (tail name) (read size)) . splitAt (fromJust $ elemIndex ' ' line)
                 in readDiskStructure' (addFile top (parseFile line):stack) rest
             | otherwise                                 = readDiskStructure' (top:stack) rest
 
+        reverseOrder :: DirectoryTree -> DirectoryTree
+        reverseOrder (DirectoryTree name ds fs) = DirectoryTree name (reverse ds) (reverse fs)
+
 
 addDirectory :: DirectoryTree -> DirectoryTree -> DirectoryTree
-addDirectory (DirectoryTree name ds fs) d = DirectoryTree name ((reverseOrder d):ds) fs
-    where reverseOrder (DirectoryTree name ds fs) = DirectoryTree name (reverse ds) (reverse fs)
+addDirectory (DirectoryTree name ds fs) d = DirectoryTree name (d:ds) fs
 
 
 addFile :: DirectoryTree -> File -> DirectoryTree
@@ -76,7 +80,7 @@ walk :: DirectoryTree -> [DirectoryTree]
 walk dt@(DirectoryTree name ds fs) = dt:(concat $ map walk ds)
 
 
-size :: DirectoryTree -> Int
+size :: DirectoryTree -> Size
 size (DirectoryTree name ds fs) = (sum $ map fileSize fs) + (sum $ map size ds)
     where fileSize (File name size) = size
 
