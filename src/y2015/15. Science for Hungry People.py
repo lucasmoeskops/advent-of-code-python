@@ -2,8 +2,6 @@ from dataclasses import dataclass
 from math import prod, inf
 from sys import stdin
 
-DATA = stdin.read().strip()
-
 
 @dataclass
 class Ingredient:
@@ -12,6 +10,30 @@ class Ingredient:
     flavor: int
     texture: int
     calories: int
+
+
+def parse_ingredients():
+    """
+    Sample input:
+
+        Sprinkles: capacity 2, durability 0, flavor -2, texture 0, calories 3
+        Butterscotch: capacity 0, durability 5, flavor -3, texture 0, calories 3
+        Chocolate: capacity 0, durability 0, flavor 5, texture -1, calories 8
+        Candy: capacity 0, durability -1, flavor 0, texture 5, calories 8
+    """
+    ingredients = {}
+
+    for line in DATA.split('\n'):
+        name, properties = line.split(': ', maxsplit=1)
+        kwargs = {}
+
+        for property in properties.split(', '):
+            property_name, property_value = property.split(' ', maxsplit=1)
+            kwargs[property_name] = int(property_value)
+
+        ingredients[name] = Ingredient(**kwargs)
+
+    return ingredients
 
 
 def calc_score(amounts, allow_negative=False, target_calories=None):
@@ -28,7 +50,7 @@ def calc_score(amounts, allow_negative=False, target_calories=None):
     """
     capacity = durability = flavor = texture = calories = 0
 
-    for ingredient, amount in zip(ingredients.values(), amounts):
+    for ingredient, amount in zip(INGREDIENTS.values(), amounts):
         capacity += amount * ingredient.capacity
         durability += amount * ingredient.durability
         flavor += amount * ingredient.flavor
@@ -57,7 +79,12 @@ def calc_score(amounts, allow_negative=False, target_calories=None):
 
 
 def dfs(teaspoons=100, target_calories=None):
-    num_ingredients = len(ingredients)
+    """ Sort of depth first search.
+
+    Start by adding equal amounts of all ingredients. Try swapping ingredients and
+    continue searching if the swapping results in a better recipe.
+    """
+    num_ingredients = len(INGREDIENTS)
     initial_division = [teaspoons // num_ingredients] * num_ingredients
     initial_division[-1] += teaspoons % (teaspoons // num_ingredients)
     best = -inf
@@ -97,17 +124,8 @@ def dfs(teaspoons=100, target_calories=None):
     return best
 
 
-ingredients = {}
-
-for line in DATA.split('\n'):
-    name, properties = line.split(': ', maxsplit=1)
-    kwargs = {}
-
-    for property in properties.split(', '):
-        property_name, property_value = property.split(' ', maxsplit=1)
-        kwargs[property_name] = int(property_value)
-
-    ingredients[name] = Ingredient(**kwargs)
+DATA = stdin.read().strip()
+INGREDIENTS = parse_ingredients()
 
 print(dfs())
 print(dfs(target_calories=500))
