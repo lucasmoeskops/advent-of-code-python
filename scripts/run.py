@@ -71,6 +71,7 @@ else:
     script_name = script_options[0]
     script_path = path.join(script_location, script_name)
     script_spec = spec_from_file_location('script', script_path)
+
     module = module_from_spec(script_spec)
 
 data_location = path.normpath(path.join(__file__, '..', '..', 'data', f'y{year}', f'{str(day).zfill(2)}.txt'))
@@ -138,7 +139,7 @@ if not direct:
                         not line.startswith('#')}
 
             if not env_data.get('SESSION'):
-                print('Mising session in .env file!')
+                print('Missing session in .env file!')
                 quit()
 
             submit_url = f"https://adventofcode.com/{year}/day/{day}/answer"
@@ -158,7 +159,7 @@ if not direct:
     if copy_to_pasteboard and which('pbcopy'):
         last = part2 if part2 else part1
         subprocess.run("pbcopy", text=True, input=last)
-        print(message_align(f'Copied part {2 if part2 else 1} to clip board!', typical_length))
+        print(message_align(f'Copied part {2 if part2 else 1} to clipboard!', typical_length))
 
     print(message_align(f'Runtime {human_time(end-start)}', typical_length))
 

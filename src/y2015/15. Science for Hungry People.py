@@ -104,7 +104,7 @@ def dfs(teaspoons=100, target_calories=None):
             new[i] += 1
 
             for j in range(num_ingredients):
-                if i == j:
+                if i == j or new[j] == 0:
                     continue
 
                 new[j] -= 1

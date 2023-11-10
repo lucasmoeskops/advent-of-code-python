@@ -32,7 +32,7 @@ def benchmark_colorize(benchmark, amount, s):
     amount *= 1000000
 
     red_ness = 0xFF if amount > benchmark else 0
-    green_ness = max(0, min(0xFF, int((0.5 + (1 - log(amount) / log(benchmark)) * .5) * 0xFF if amount < benchmark else int(0xFF - min(0xFF, 0xFF * amount / 25 / benchmark)))))
+    green_ness = max(0, min(0xFF, int((0.5 + (1 - log(max(1, amount)) / log(benchmark)) * .5) * 0xFF if amount < benchmark else int(0xFF - min(0xFF, 0xFF * amount / 25 / benchmark)))))
     blue_ness = int(max(0, 1000 - min(1000, amount)) * 0xFF // 400)
 
     return xtermcolor.colorize(s, rgb=red_ness*0x10000+green_ness*0x100+blue_ness)
@@ -76,7 +76,7 @@ year += 2000
 error = module = script_name = script_path = ''
 buffer = script_spec = None
 
-widths = 6, 40, 20
+widths = 6, 40, 20, 4, 60
 first_message = f'Advent of Code {year} runtimes'
 print(message_align(first_message, sum(widths)+2*len(widths), align_character='='))
 total_runtime = 0
@@ -92,12 +92,15 @@ for day in range(1, 26):
     day_message = message_align(f'Day {" " if day < 10 else ""}{day}', widths[0], align_character=' ', align=-1)
     title_message = message_align(' ', widths[1], side_character='|', align_character=' ')
     runtime_message = message_align(' ', widths[2], align_character=' ')
+    success_message = message_align(' | ', widths[3], align_character=' ')
+    lore_message = message_align('|  ', widths[4] + 2, align=-1, align_character=' ')
 
     data_location = path.normpath(path.join(__file__, '..', '..', 'data', f'y{year}', f'{str(day).zfill(2)}.txt'))
+    test_location = path.normpath(path.join(__file__, '..', '..', 'data', f'y{year}', f'{str(day).zfill(2)}.out'))
 
     if not path.exists(data_location):
-        print(message_align(day_message + title_message + runtime_message, sum(widths), align_character=' ',
-                            side_character='|'))
+        # print(message_align(day_message + title_message + runtime_message + success_message, sum(widths), align_character=' ',
+        #                     side_character='|'))
         continue
 
     data = open(data_location, 'r').read()
@@ -107,7 +110,7 @@ for day in range(1, 26):
     script_location = path.normpath(path.join(__file__, '..', '..', 'src', f'y{year}'))
     script_options = [x for x in listdir(script_location) if x.startswith(f'{str(day).zfill(2)}.') and x.endswith('.py')]
     if not script_options:
-        print(message_align(day_message + title_message + runtime_message, sum(widths), align_character=' ', side_character='|'))
+        print(message_align(day_message + title_message + runtime_message + lore_message, sum(widths), align_character=' ', side_character='|'))
         continue
     else:
         script_name = script_options[0]
@@ -119,20 +122,29 @@ for day in range(1, 26):
     title_message = message_align(title, widths[1], side_character='|', align_character=' ', max_length=widths[1], align=-1)
 
     sys.stdin = StringIO(data)
-    start = time()
 
     buffer = StringIO()
     sys.stdout = buffer
+    start = time()
     script_spec.loader.exec_module(module)
-    sys.stdout = sys.__stdout__
-
     end = time()
+    sys.stdout = sys.__stdout__
     sys.stdin = sys.__stdin__
+    buffer.seek(0)
+    result = buffer.read().strip()
+    test = open(test_location, 'r').read().strip() if path.exists(test_location) else None
+    success = None if not path.exists(test_location) else result == test
+    if success is False:
+        print(result.replace('\n', '***'), test.replace('\n', '***'), sep='\n')
 
     runtime_message = benchmark_colorize(per_puzzle, end-start, human_time(end-start))
-    runtime_message = message_align(' ' + runtime_message, widths[2], align_character=' ', max_length=widths[2], align=1, spacing=0)
-    print(message_align(day_message + title_message + runtime_message, sum(widths), align_character=' ',
-                        side_character='|'))
+    runtime_message = message_align(' ' + runtime_message + ' ', widths[2], align_character=' ', max_length=widths[2], align=1, spacing=0)
+    success_message = '✓' if success else ('✗' if success is False else '?')
+    success_message = message_align(' | ' + success_message, widths[3], align_character=' ', max_length=widths[3])
+    if hasattr(module, '__summary__'):
+        lore_message = '| ' + module.__summary__[:60]
+        lore_message += ' ' * (widths[4] - len(lore_message)+2)
+    print(message_align(day_message + title_message + runtime_message + success_message + lore_message, sum(widths), align_character=' ', side_character='|'))
 
     total_runtime += end-start
 
@@ -142,12 +154,3 @@ runtime_message = benchmark_colorize(1000000, total_runtime, human_time(total_ru
 runtime_message = message_align(runtime_message, widths[2], align_character=' ', spacing=0, align=1)
 print(message_align(total_message + ' ' + runtime_message, sum(widths)+2*len(widths), align_character=' ', side_character='|', spacing=0))
 print(message_align('', sum(widths)+2*len(widths), align_character='=', spacing=0))
-#
-#
-# def yy():
-#     x = 100.0
-#     for i in range(20):
-#         yield x
-#         x /= 3
-#
-# print(''.join(benchmark_colorize(40000, x, i) for i, x in enumerate(yy())))

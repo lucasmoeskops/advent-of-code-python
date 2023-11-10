@@ -4,8 +4,10 @@ AoC Day 2 - 1202 Program Alarm - in Python.
 
 __author__ = "Lucas Moeskops"
 __date__ = "2020-12-27"
+__summary__ = "Repair computer for gravity assist around Moon"
 
 from sys import stdin
+
 
 def run(program):
     position, program, halted = 0, program[:], False
@@ -13,6 +15,7 @@ def run(program):
         state = position, program, halted
         position, program, halted = step(state)
     return program
+
 
 def step(state):
     position, program, halted = state
@@ -30,9 +33,11 @@ def step(state):
         halted = True
     return position, program, halted
 
+
 def initialize(program, noun, verb):
     program[1] = noun
     program[2] = verb
+
 
 def find_19690720(program):
     for noun in range(100):
@@ -42,12 +47,13 @@ def find_19690720(program):
             if run(program_2)[0] == 19690720:
                 return noun, verb
 
+
 program = [int(line) for line in stdin.read().split(',')]
 
 program_2 = program[:]
 initialize(program_2, 12, 2)
 result = run(program_2)
-print(f'1: {result[0]}')
+print(result[0])
 
 noun, verb = find_19690720(program)
-print(f'2: {noun * 100 + verb}')
+print(noun * 100 + verb)
