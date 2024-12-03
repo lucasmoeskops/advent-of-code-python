@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+import re
+
 import requests
 import subprocess
 import webbrowser
@@ -50,15 +52,9 @@ interactive = 'i' in flags
 copy_to_pasteboard = 'p' in flags
 do_submit = 's' in flags
 
-if direct and copy_to_pasteboard:
-    print('Direct and copy to pasteboard can not be used together')
-    quit()
-if direct and do_submit:
-    print('Direct and submit can not be used together')
-    quit()
-if interactive and do_submit:
-    print('Interactive and do submit are not allowed together')
-    quit()
+def check_for_pdb(file_contents):
+    regex = re.compile(r'\n[^\n#]*import pdb')
+    return regex.search(file_contents) is not None
 
 error = module = script_name = script_path = ''
 buffer = script_spec = None
@@ -71,8 +67,11 @@ else:
     script_name = script_options[0]
     script_path = path.join(script_location, script_name)
     script_spec = spec_from_file_location('script', script_path)
-
     module = module_from_spec(script_spec)
+
+    if not direct and check_for_pdb(open(script_path, 'r').read()):
+        direct = True
+        print('Script contains pdb import, running in direct mode.')
 
 data_location = path.normpath(path.join(__file__, '..', '..', 'data', f'y{year}', f'{str(day).zfill(2)}.txt'))
 
@@ -89,6 +88,16 @@ while data.startswith('\n'):
 while data.endswith('\n'):
     data = data[:-1]
 
+if direct and copy_to_pasteboard:
+    print('Direct and copy to pasteboard can not be used together')
+    quit()
+if direct and do_submit:
+    print('Direct and submit can not be used together')
+    quit()
+if interactive and do_submit:
+    print('Interactive and do submit are not allowed together')
+    quit()
+
 first_message = f'===== Advent of Code december {adjectivized_number(day)} {year} ====='
 title = script_name[4:-3]
 typical_length = len(first_message)
@@ -98,10 +107,10 @@ if error:
     quit()
 print(message_align(title, typical_length))
 
-sys.stdin = StringIO(data)
 start = time()
 
 if not direct:
+    sys.stdin = StringIO(data)
     buffer = StringIO()
     sys.stdout = buffer
     script_spec.loader.exec_module(module)
