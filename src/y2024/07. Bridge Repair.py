@@ -35,7 +35,7 @@ calibration_advanced = evaluator((add, mul, concat))
 result_basic = 0
 result_advanced = 0
 
-for line in lines(puzzle.strip()):
+for line in puzzle.split('\n'):
     result, *operators = map(int, line.replace(':', '').split())
     if calibration_basic(operators, result):
         result_basic += result
