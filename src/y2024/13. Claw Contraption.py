@@ -8,10 +8,7 @@ __author__ = "Lucas Moeskops"
 __date__ = "2024-12-13"
 __summary__ = "Back to year 2020, day 24"
 
-from lib import *
-
-ca = Counter()
-b = Counter()
+from lib import bisect_left, ints, read_input
 
 
 def test_number(ax, ay, bx, by, px, py):
