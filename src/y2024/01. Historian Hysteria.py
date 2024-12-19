@@ -8,7 +8,7 @@ __author__ = "Lucas Moeskops"
 __date__ = "2024-12-01"
 __summary__ = "The Chief Historian is lost"
 
-from lib import *
+from lib import Counter, batched, read_input
 
 puzzle = read_input(2024, 1)
 numbers = map(int, puzzle.split())

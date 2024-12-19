@@ -6,9 +6,9 @@ AoC Day 8 - Resonant Collinearity - in Python.
 
 __author__ = "Lucas Moeskops"
 __date__ = "2024-12-08"
-__summary__ = "The chief isn't on the roof of a top-secret facility"
+__summary__ = "Back to year 2016, day 25"
 
-from lib import *
+from lib import count, defaultdict, permutations, read_input
 
 
 puzzle = read_input(2024, 8)

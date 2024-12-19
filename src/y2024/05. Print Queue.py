@@ -6,9 +6,9 @@ AoC Day 5 - Print Queue - in Python.
 
 __author__ = "Lucas Moeskops"
 __date__ = "2024-12-05"
-__summary__ = "He isn't in sub-basement 17 of the North Pole"
+__summary__ = "Back to year 2017, day 1"
 
-from lib import *
+from lib import defaultdict, read_input
 
 
 puzzle = read_input(2024, 5)

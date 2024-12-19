@@ -6,9 +6,9 @@ AoC Day 6 - Guard Gallivant - in Python.
 
 __author__ = "Lucas Moeskops"
 __date__ = "2024-12-06"
-__summary__ = "The chief isn't at the prototype suit manufacturing lab"
+__summary__ = "Back to year 2018, day 5"
 
-from lib import *
+from lib import batched, read_input
 
 LOOP = 1
 EXIT = 2

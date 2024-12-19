@@ -8,12 +8,12 @@ __author__ = "Lucas Moeskops"
 __date__ = "2024-12-09"
 __summary__ = "Back to year 2021, day 23"
 
-from lib import *
+from lib import itemgetter, read_input
 
 
 puzzle = read_input(2024, 9)
 areas = list(map(int, puzzle))
-areas_2 = copy(areas)
+areas_2 = list(areas)
 start, end = 0, len(areas) - 1
 total = 0
 index = 0

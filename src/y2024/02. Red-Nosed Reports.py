@@ -6,9 +6,9 @@ AoC Day 2 - Red-Nosed Reports - in Python.
 
 __author__ = "Lucas Moeskops"
 __date__ = "2024-12-02"
-__summary__ = "The Chief Historian is not in the nuclear fusion plant"
+__summary__ = "Back to year 2015, day 19"
 
-from lib import *
+from lib import pairwise, read_input
 
 
 def find_issue(report):

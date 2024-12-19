@@ -8,7 +8,7 @@ __author__ = "Lucas Moeskops"
 __date__ = "2024-12-10"
 __summary__ = "Back to year 2023, day 15"
 
-from lib import *
+from lib import batched, deque, read_input
 
 
 puzzle = read_input(2024, 10)

@@ -6,9 +6,9 @@ AoC Day 7 - Bridge Repair - in Python.
 
 __author__ = "Lucas Moeskops"
 __date__ = "2024-12-07"
-__summary__ = "The chief isn't at the jungle rope bridge"
+__summary__ = "Back to year 2022, day 9"
 
-from lib import *
+from lib import add, mul, read_input
 
 
 def concat(a, b):

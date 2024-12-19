@@ -6,9 +6,9 @@ AoC Day 4 - Ceres Search - in Python.
 
 __author__ = "Lucas Moeskops"
 __date__ = "2024-12-04"
-__summary__ = "He is not in the Ceres Monitoring Station"
+__summary__ = "Back to year 2019, day 10"
 
-from lib import *
+from lib import re, read_input
 
 
 puzzle = read_input(2024, 4)

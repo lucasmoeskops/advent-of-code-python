@@ -6,9 +6,9 @@ AoC Day 3 - Mull It Over - in Python.
 
 __author__ = "Lucas Moeskops"
 __date__ = "2024-12-03"
-__summary__ = "He is not in the Toboggan Rental Shop"
+__summary__ = "Back to year 2020, day 2"
 
-from lib import *
+from lib import re, read_input
 
 pattern = r'mul\((\d+),(\d+)\)'
 
