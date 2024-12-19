@@ -11,11 +11,6 @@ __summary__ = "Back to year 2023, day 5 and 21"
 from lib import List, Tuple, batched, pairwise, read_input
 
 
-puzzle = read_input(2024, 12)
-width = puzzle.index('\n')
-height = puzzle.count('\n') + 1
-puzzle = list(map(list, batched(puzzle.replace('\n', ''), width)))
-
 def find_shape_and_size(x, y, c, container) -> int:
     if puzzle[y][x] != c:
         return 0
@@ -81,6 +76,10 @@ def shape_list_to_shape(shape_list: List[Tuple[int, int]]) -> List[List[str]]:
     return shape
 
 
+puzzle = read_input(2024, 12)
+width = puzzle.index('\n')
+height = puzzle.count('\n') + 1
+puzzle = list(map(list, batched(puzzle.replace('\n', ''), width)))
 total_1 = total_2 = 0
 
 for y, row in enumerate(puzzle):
