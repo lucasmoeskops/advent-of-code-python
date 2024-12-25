@@ -8,7 +8,7 @@ __author__ = "Lucas Moeskops"
 __date__ = "2024-12-15"
 __summary__ = "Back to year 2021, day 6"
 
-from lib import *
+from lib import batched, itemgetter, read_input
 
 
 class WallError(Exception):

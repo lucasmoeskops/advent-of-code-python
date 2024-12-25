@@ -8,7 +8,7 @@ __author__ = "Lucas Moeskops"
 __date__ = "2024-12-17"
 __summary__ = "Back to year 2018, day 6"
 
-from lib import *
+from lib import re, read_input
 
 
 def make_clone(index=None, prefix=0):
@@ -60,6 +60,6 @@ def run(value):
 
 
 puzzle = read_input(2024, 17)
-registry, program = map(ints, puzzle.split('\n\n'))
-print(','.join(map(str, run(registry[0]))))
+a_value, _, _, *program = map(int, re.findall(r'-?\d+', puzzle + '*'))
+print(','.join(map(str, run(a_value))))
 print(make_clone())

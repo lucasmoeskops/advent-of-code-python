@@ -8,7 +8,7 @@ __author__ = "Lucas Moeskops"
 __date__ = "2024-12-16"
 __summary__ = "Back to year 2015, day 14"
 
-from lib import *
+from lib import NamedTuple, Optional, batched, defaultdict, heappush, heappop, inf, read_input
 
 
 class Node(NamedTuple):
@@ -48,16 +48,18 @@ while queue:
             node_lookup.append(Node(x, y, n))
             heappush(queue, (steps + 1000, x, y, ndx, ndy, len(node_lookup) - 1))
 
-print(steps)
-
 queue.append((steps, x, y, dx, dy, n))
 for steps, ox, oy, _, _, n in queue:
     if steps > max_steps or ox != x or oy != y:
         continue
+
     n = node_lookup[n].prev_node
     best_places.add((x, y))
+
     while n:
         node = node_lookup[n]
         best_places.add((node.x, node.y))
         n = node_lookup[n].prev_node
+
+print(steps)
 print(len(best_places))

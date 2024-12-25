@@ -10,12 +10,13 @@ __summary__ = "Back to year 2016, day 2"
 
 from collections import Counter
 
-from lib import batched, ints, prod, read_input, re
+from lib import batched, deepcopy, prod, read_input, re
 
 
 puzzle = read_input(2024, 14)
-robots = list(map(list, batched(ints(puzzle), 4)))
-robots_clean = list(map(list, batched(ints(puzzle), 4)))
+ints = map(int, re.findall(r'(-?\d+)\D', puzzle + '*'))
+robots = list(map(list, batched(ints, 4)))
+robots_clean = deepcopy(robots)
 width = 101
 height = 103
 best, best_at = 0, 0
