@@ -30,12 +30,39 @@ def benchmark_colorize(benchmark, amount, s):
     if xtermcolor is None:
         return s
     amount *= 1000000
-
-    red_ness = 0xFF if amount > benchmark else 0
-    green_ness = max(0, min(0xFF, int((0.5 + (1 - log(max(1, amount)) / log(benchmark)) * .5) * 0xFF if amount < benchmark else int(0xFF - min(0xFF, 0xFF * amount / 25 / benchmark)))))
-    blue_ness = int(max(0, 1000 - min(1000, amount)) * 0xFF // 400)
-
-    return xtermcolor.colorize(s, rgb=red_ness*0x10000+green_ness*0x100+blue_ness)
+    if amount < 1:
+        # diamond
+        rgb = 0x0CF
+    elif amount < 10:
+        # gold
+        rgb = 0xFFD700
+    elif amount < 100:
+        # platinum
+        print('plat')
+        rgb = 0xE5E4E2
+    elif amount < 1000:
+        # silver
+        rgb = 0xC0C0C0
+    elif amount < 10000:
+        # bronze
+        rgb = 0xCD7F32
+    elif amount < 100000:
+        # emerald
+        rgb = 0x50C878
+    elif amount < 1000000:
+        # ruby
+        rgb = 0xE0115F
+    else:
+        # sapphire
+        rgb = 0x0F52BA
+    # amount *= 1000000
+    #
+    # red_ness = 0xFF if amount > benchmark else 0
+    # green_ness = max(0, min(0xFF, int((0.5 + (1 - log(max(1, amount)) / log(benchmark)) * .5) * 0xFF if amount < benchmark else int(0xFF - min(0xFF, 0xFF * amount / 25 / benchmark)))))
+    # blue_ness = int(max(0, 1000 - min(1000, amount)) * 0xFF // 400)
+    #
+    # return xtermcolor.colorize(s, rgb=red_ness*0x10000+green_ness*0x100+blue_ness)
+    return xtermcolor.colorize(s, rgb=rgb)
 
 
 def human_time(amount):
