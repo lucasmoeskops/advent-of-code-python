@@ -67,31 +67,32 @@ def benchmark_colorize(benchmark, amount, s):
 
 def human_time(amount):
     if amount < 0.001:
-        return f'{int(amount * 1000000)} microseconds!'
+        return f'{int(amount * 1000000)} microseconds'
     if amount < 0.01:
-        return f'{int(amount * 10000)/10.0} milliseconds!'
+        return f'{int(amount * 10000)/10.0} milliseconds'
     if amount < 1:
-        return f'{int(amount * 1000)} milliseconds!'
+        return f'{int(amount * 1000)} milliseconds'
     if amount < 10:
-        return f'{int(amount * 10)/10.0} seconds!'
-    return f'{int(amount)} seconds!'
+        return f'{int(amount * 10)/10.0} seconds'
+    return f'{int(amount)} seconds'
 
 
-def message_align(message, length, align_character='-', spacing=1, side_character='', max_length=None, align=0):
+def message_align(message, length, align_character='-', spacing=1, side_character='', max_length=None, align=0, side_character_right=True):
     if xtermcolor is not None:
         real_message, message = message, re.sub(r'\x1b\[\d+(;\d+)*m', '', message)
     else:
         real_message = message
-    if max_length and len(message) + len(side_character) * 2 + spacing * 2 > max_length:
-        message = message[:max_length-spacing*2-len(side_character)*2-3] + '...'
-    remaining = max(0, length - spacing * 2 - len(side_character) * 2 - len(message))
+    num_side_character = 2 if side_character_right else 1
+    if max_length and len(message) + len(side_character) * num_side_character + spacing * 2 > max_length:
+        message = message[:max_length-spacing*2-len(side_character)*num_side_character-3] + '...'
+    remaining = max(0, length - spacing * 2 - len(side_character) * num_side_character - len(message))
     if align == -1:
         left, right = 0, remaining
     elif align == 1:
         left, right = remaining, 0
     else:
         left, right = remaining // 2 + remaining % 2, remaining // 2
-    return f'{side_character}{align_character * left}{" "*spacing}{real_message}{" "*spacing}{align_character * right}{side_character}'
+    return f'{side_character}{align_character * left}{" "*spacing}{real_message}{" "*spacing}{align_character * right}{side_character if side_character_right else ""}'
 
 
 flags = [x[1:] for x in argv if x.startswith('-')]
@@ -101,13 +102,22 @@ year = int(rest[1]) % 100 if len(rest) > 1 else date.today().year % 100
 year += 2000
 
 show_summary = 's' in flags
+markdown = 'm' in flags
 
 error = module = script_name = script_path = ''
 buffer = script_spec = None
 
-widths = (6, 40, 20, 4, 60) if show_summary else (6, 40, 20, 4)
+widths = (6, 40, 20, 5, 60) if show_summary else (6, 40, 20, 8)
 first_message = f'Advent of Code {year} runtimes'
-print(message_align(first_message, sum(widths)+2*len(widths), align_character='='))
+if markdown and not show_summary:
+    day_message = message_align(' Day', widths[0], align_character=' ', spacing=2)
+    title_message = message_align('Title', widths[1], side_character='|', align_character=' ')
+    runtime_message = message_align('Runtime', widths[2] + 3, align_character=' ')
+    success_message = message_align('✓/✗', widths[3] - 4, side_character='|', align_character='', side_character_right=False)
+    print(message_align(day_message + title_message + runtime_message + success_message, sum(widths), align_character='', side_character='|'))
+    print(f'| -{"-" * widths[0]} | {"-" * (widths[1] - 4)} | -{"-" * widths[2]} | {"-" * (widths[3] - 5)} |')
+else:
+    print(message_align(first_message, sum(widths)+2*len(widths), align_character='='))
 total_runtime = 0
 
 benchmark = 1
