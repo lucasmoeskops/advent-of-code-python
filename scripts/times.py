@@ -100,10 +100,12 @@ rest = [x for x in argv if not x.startswith('-')]
 year = int(rest[1]) % 100 if len(rest) > 1 else date.today().year % 100
 year += 2000
 
+show_summary = 's' in flags
+
 error = module = script_name = script_path = ''
 buffer = script_spec = None
 
-widths = 6, 40, 20, 4, 60
+widths = (6, 40, 20, 4, 60) if show_summary else (6, 40, 20, 4)
 first_message = f'Advent of Code {year} runtimes'
 print(message_align(first_message, sum(widths)+2*len(widths), align_character='='))
 total_runtime = 0
@@ -120,7 +122,7 @@ for day in range(1, 26):
     title_message = message_align(' ', widths[1], side_character='|', align_character=' ')
     runtime_message = message_align(' ', widths[2], align_character=' ')
     success_message = message_align(' | ', widths[3], align_character=' ')
-    lore_message = message_align('|  ', widths[4] + 2, align=-1, align_character=' ')
+    lore_message = message_align('|  ', widths[4] + 2, align=-1, align_character=' ') if show_summary else ''
 
     data_location = path.normpath(path.join(__file__, '..', '..', 'data', f'y{year}', f'{str(day).zfill(2)}.txt'))
     test_location = path.normpath(path.join(__file__, '..', '..', 'data', f'y{year}', f'{str(day).zfill(2)}.out'))
@@ -168,7 +170,7 @@ for day in range(1, 26):
     runtime_message = message_align(' ' + runtime_message + ' ', widths[2], align_character=' ', max_length=widths[2], align=1, spacing=0)
     success_message = '✓' if success else ('✗' if success is False else '?')
     success_message = message_align(' | ' + success_message, widths[3], align_character=' ', max_length=widths[3])
-    if hasattr(module, '__summary__'):
+    if show_summary and hasattr(module, '__summary__'):
         lore_message = '| ' + module.__summary__[:60]
         lore_message += ' ' * (widths[4] - len(lore_message)+2)
     print(message_align(day_message + title_message + runtime_message + success_message + lore_message, sum(widths), align_character=' ', side_character='|'))
