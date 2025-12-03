@@ -20,23 +20,20 @@ best_choices = [0, 0]
 
 for line in lines:
     length = len(line)
-    # Convert line to list of integers
-    values = [*map(int, line)]
 
     # Check for both part 1 and part 2
     for i, num_batteries in enumerate((2, 12)):
-        pointer = 0
-        chosen = []
+        pointer = chosen = 0
 
         # Find best remaining battery choices
         for j in range(num_batteries - 1, -1, -1):
             # Choose best value while leaving enough remaining for the rest
-            value = max(values[pointer:length-j])
+            value = max(line[pointer:length-j])
             # Shorten the search space for remaining batteries
-            pointer = values.index(value, pointer) + 1
-            chosen.append(value)
+            pointer = line.index(value, pointer) + 1
+            chosen = 10 * chosen + ord(value) - ord('0')
 
-        # Update answer with best choice found
-        best_choices[i] += int(''.join(map(str, chosen)))
+        # Update answer with the best choice found
+        best_choices[i] += chosen
 
 print(f'{best_choices[0]}\n{best_choices[1]}')  # Part 1 & 2
