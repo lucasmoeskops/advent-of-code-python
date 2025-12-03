@@ -187,9 +187,14 @@ for day in range(1, 26):
 
     total_runtime += end-start
 
-print(message_align('', sum(widths)+2*len(widths), align_character='-', spacing=0))
 total_message = message_align(f'Total runtime:', widths[0] + widths[1], align_character=' ', spacing=0, align=-1)
 runtime_message = benchmark_colorize(1000000, total_runtime, human_time(total_runtime))
 runtime_message = message_align(runtime_message, widths[2], align_character=' ', spacing=0, align=1)
-print(message_align(total_message + ' ' + runtime_message, sum(widths)+2*len(widths), align_character=' ', side_character='|', spacing=0))
-print(message_align('', sum(widths)+2*len(widths), align_character='=', spacing=0))
+
+if markdown and not show_summary:
+    print(f'| -{"-" * widths[0]} | {"-" * (widths[1] - 4)} | -{"-" * widths[2]} | {"-" * (widths[3] - 5)} |')
+    print(f'| {total_message} | {runtime_message} | {" " * (widths[3] - 5)} |')
+else:
+    print(message_align('', sum(widths)+2*len(widths), align_character='-', spacing=0))
+    print(message_align(total_message + ' ' + runtime_message, sum(widths)+2*len(widths), align_character=' ', side_character='|', spacing=0))
+    print(message_align('', sum(widths)+2*len(widths), align_character='=', spacing=0))

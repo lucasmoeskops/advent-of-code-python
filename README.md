@@ -52,8 +52,8 @@ Paste or type input and press <enter>, then <Ctrl> + d.
 
 ### Year 2024
 
-|    Day  |                 Title                |        Runtime        | ✓/✗  |
-| ------- | ------------------------------------ | --------------------- | --- |
+|    Day  | Title                                |        Runtime        | ✓/✗  |
+| ------- |--------------------------------------| --------------------- | --- |
 |  Day  1 | Historian Hysteria                   |   9.2 milliseconds    | ✓   |
 |  Day  2 | Red-Nosed Reports                    |   1.8 milliseconds    | ✓   |
 |  Day  3 | Mull It Over                         |   652 microseconds    | ✓   |
@@ -79,6 +79,15 @@ Paste or type input and press <enter>, then <Ctrl> + d.
 |  Day 23 | LAN Party                            |    25 milliseconds    | ✓   |
 |  Day 24 | Crossed Wires                        |   2.2 milliseconds    | ✓   |
 |  Day 25 | Code Chronicle                       |    21 milliseconds    | ✓   |
-----------------------------------------------------------------------------------
-|       Total runtime:                                          6.8 seconds      |
+| ------- | ------------------------------------ | --------------------- | --- |
+|   |     Total runtime:                   |                                         6.8 seconds |
 
+### Year 2025
+
+|    Day  | Title                                |        Runtime        | ✓/✗  |
+| ------- |--------------------------------------| --------------------- | --- |
+|  Day  1 | Secret Entrance                      |    10 milliseconds    | ✓   |
+|  Day  2 | Gift Shop                            |   748 microseconds    | ✓   |
+|  Day  3 | Lobby                                |   3.3 milliseconds    | ✓   |
+| ------- | ------------------------------------ | --------------------- | --- |
+| | Total runtime:                       |      14 milliseconds |     |
