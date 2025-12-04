@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-AoC Day 1 - ? - in Python.
+AoC Day 1 - Secret Entrance - in Python.
 """
 
 __author__ = "Lucas Moeskops"
@@ -42,8 +42,8 @@ for command in commands:
         if new % SIZE == 0:
             times_past_zero += 1
 
-        # Reset previous for the next command
-        previous = new
+    # Reset previous for the next command
+    previous = new
 
 print(times_zero)  # Part 1
 print(times_past_zero)  # Part 2
