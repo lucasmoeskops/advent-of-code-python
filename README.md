@@ -87,8 +87,10 @@ Paste or type input and press <enter>, then <Ctrl> + d.
 |    Day  | Title                                |        Runtime        | ✓/✗  |
 | ------- |--------------------------------------| --------------------- | --- |
 |  Day  1 | Secret Entrance                      |   5.7 milliseconds    | ✓   |
-|  Day  2 | Gift Shop                            |   415 microseconds    | ✓   |
-|  Day  3 | Lobby                                |   2.1 milliseconds    | ✓   |
-|  Day  4 | Printing Department                  |    35 milliseconds    | ?   |
+|  Day  2 | Gift Shop                            |   402 microseconds    | ✓   |
+|  Day  3 | Lobby                                |   2.0 milliseconds    | ✓   |
+|  Day  4 | Printing Department                  |    34 milliseconds    | ✓   |
+|  Day  5 | Cafetaria                            |   551 microseconds    | ✓   |
+|  Day  6 | Trash Compactor                      |   1.5 milliseconds    | ✓   |
 | ------- | ------------------------------------ | --------------------- | --- |
-| | Total runtime:                       |      43 milliseconds |     |
+||  Total runtime:                      |      45 milliseconds |     |
