@@ -54,33 +54,34 @@ Paste or type input and press <enter>, then <Ctrl> + d.
 
 |    Day  | Title                                |        Runtime        | ✓/✗  |
 | ------- |--------------------------------------| --------------------- | --- |
-|  Day  1 | Historian Hysteria                   |   9.2 milliseconds    | ✓   |
-|  Day  2 | Red-Nosed Reports                    |   1.8 milliseconds    | ✓   |
-|  Day  3 | Mull It Over                         |   652 microseconds    | ✓   |
-|  Day  4 | Ceres Search                         |   1.7 milliseconds    | ✓   |
-|  Day  5 | Print Queue                          |   1.5 milliseconds    | ✓   |
-|  Day  6 | Guard Gallivant                      |   757 milliseconds    | ✓   |
-|  Day  7 | Bridge Repair                        |   880 milliseconds    | ✓   |
-|  Day  8 | Resonant Collinearity                |   935 microseconds    | ✓   |
-|  Day  9 | Disk Fragmenter                      |    19 milliseconds    | ✓   |
-|  Day 10 | Hoof It                              |   3.8 milliseconds    | ✓   |
-|  Day 11 | Plutonian Pebbles                    |    48 milliseconds    | ✓   |
+|  Day  1 | Historian Hysteria                   |   7.5 milliseconds    | ✓   |
+|  Day  2 | Red-Nosed Reports                    |   1.7 milliseconds    | ✓   |
+|  Day  3 | Mull It Over                         |   615 microseconds    | ✓   |
+|  Day  4 | Ceres Search                         |   1.5 milliseconds    | ✓   |
+|  Day  5 | Print Queue                          |   1.3 milliseconds    | ✓   |
+|  Day  6 | Guard Gallivant                      |   776 milliseconds    | ✓   |
+|  Day  7 | Bridge Repair                        |   921 milliseconds    | ✓   |
+|  Day  8 | Resonant Collinearity                |   1.1 milliseconds    | ✓   |
+|  Day  9 | Disk Fragmenter                      |    22 milliseconds    | ✓   |
+|  Day 10 | Hoof It                              |   4.0 milliseconds    | ✓   |
+|  Day 11 | Plutonian Pebbles                    |    47 milliseconds    | ✓   |
 |  Day 12 | Garden Groups                        |    19 milliseconds    | ✓   |
-|  Day 13 | Claw Contraption                     |   4.6 milliseconds    | ✓   |
-|  Day 14 | Restroom Redoubt                     |    36 milliseconds    | ✓   |
-|  Day 15 | Warehouse Woes                       |    17 milliseconds    | ✓   |
-|  Day 16 | Reindeer Maze                        |   579 milliseconds    | ✓   |
-|  Day 17 | Chronospatial Computer               |   1.0 milliseconds    | ✓   |
-|  Day 18 | RAM Run                              |    11 milliseconds    | ✓   |
-|  Day 19 | Linen Layout                         |   338 milliseconds    | ✓   |
-|  Day 20 | Race Condition                       |        2.5 seconds    | ✓   |
-|  Day 21 | Keypad Conundrum                     |    10 milliseconds    | ✓   |
+|  Day 13 | Claw Contraption                     |   4.7 milliseconds    | ✓   |
+|  Day 14 | Restroom Redoubt                     |    38 milliseconds    | ✓   |
+|  Day 15 | Warehouse Woes                       |    18 milliseconds    | ✓   |
+|  Day 16 | Reindeer Maze                        |   613 milliseconds    | ✓   |
+|  Day 17 | Chronospatial Computer               |   1.1 milliseconds    | ✓   |
+|  Day 18 | RAM Run                              |    12 milliseconds    | ✓   |
+|  Day 19 | Linen Layout                         |    16 milliseconds    | ✓   |
+|  Day 20 | Race Condition                       |        2.6 seconds    | ✓   |
+|  Day 21 | Keypad Conundrum                     |    12 milliseconds    | ✓   |
 |  Day 22 | Monkey Market                        |        1.4 seconds    | ✓   |
-|  Day 23 | LAN Party                            |    25 milliseconds    | ✓   |
+|  Day 23 | LAN Party                            |    24 milliseconds    | ✓   |
 |  Day 24 | Crossed Wires                        |   2.2 milliseconds    | ✓   |
-|  Day 25 | Code Chronicle                       |    21 milliseconds    | ✓   |
+|  Day 25 | Code Chronicle                       |    23 milliseconds    | ✓   |
 | ------- | ------------------------------------ | --------------------- | --- |
-|   |     Total runtime:                   |                                         6.8 seconds |
+| | Total runtime:                       |          6.6 seconds |     |
+
 
 ### Year 2025
 
